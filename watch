@@ -1,0 +1,2 @@
+nodemon --exec go run ./src/*.go ./test/main.qm --watch ./src --watch ./test --ext go,qm --signal SIGTERM
+# nodemon --exec go run ./src/*.go --watch ./src --ext go --signal SIGTERM
