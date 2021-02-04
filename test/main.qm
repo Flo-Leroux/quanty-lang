@@ -1,3 +1,0 @@
-component UserCard {
-    prop name string = Flo;
-}
