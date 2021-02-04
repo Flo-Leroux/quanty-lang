@@ -1,0 +1,12 @@
+package main
+
+component UserCard {
+    prop name string = "Flo"
+}
+
+component Avatar {
+    prop name string = "Avatar"
+    prop initials string = "FL"
+    prop src string
+    prop alt string = "Bonjour"
+}
