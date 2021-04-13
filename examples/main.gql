@@ -1,0 +1,26 @@
+component QuantumComponent {
+    connect {
+        counterStore: CounterStore
+    }
+
+    template: QuantumTpl @wrap(tag: div)
+}
+
+store CounterStore {
+    counter: Int = 0
+    
+    increment: fun {
+        counter + 1
+    }
+
+    decrement: fun {
+        counter - 1 
+    }
+}
+
+template QuantumTpl {
+    button: Increment @on(click: increment)
+    span: counter
+    button: Decrement @on(click: decrement)
+}
+
