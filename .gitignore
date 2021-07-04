@@ -1,6 +1,2 @@
-goutil
-parser
-lexer
-token
-build/*
-!build/.gitkeep
+./build/*
+!./build/.gitkeep
