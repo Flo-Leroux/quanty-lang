@@ -2,53 +2,67 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"quanty/ast"
 
-	"github.com/alecthomas/kong"
-	"github.com/alecthomas/participle/v2"
-	"github.com/alecthomas/participle/v2/lexer/stateful"
-	"github.com/alecthomas/repr"
+	"github.com/vektah/gqlparser/v2"
+	gqlast "github.com/vektah/gqlparser/v2/ast"
 )
 
-var (
-	// graphQLLexer = lexer.Must(stateful.NewSimple([]stateful.Rule{
-	// 	{"Comment", `(?:#|//)[^\n]*\n?`, nil},
-	// 	{"Ident", `[A-Z][a-zA-Z]\w*`, nil},
-	// 	{"Number", `(?:\d*\.)?\d+`, nil},
-	// 	{"Punct", `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`, nil},
-	// 	{"Whitespace", `[ \t\n\r]+`, nil},
-	// }))
-	lexer = stateful.MustSimple([]stateful.Rule{
-		{`Ident`, `[a-zA-Z][a-zA-Z_\d]*`, nil},
-		{"Comment", `[#;][^\n]*`, nil},
-		{"Whitespace", `[ \r\t\n]+`, nil},
-	})
-	parser = participle.MustBuild(&ast.File{},
-		participle.Lexer(lexer),
-		participle.Elide("Comment", "Whitespace"),
-		participle.UseLookahead(2),
-	)
-)
-
-var cli struct {
-	EBNF  bool     `help"Dump EBNF."`
-	Files []string `arg:"" optional:"" type:"existingfile" help:"GraphQL schema files to parse."`
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
 
+var schema = gqlparser.MustLoadSchema(
+	&gqlast.Source{
+		Name: "test.graphql",
+		Input: `
+		type User {
+			id: ID!
+			name: String!
+			photo: Picture
+		}
+		
+		type Picture {
+			id: ID!
+			url: String!
+		}
+		`,
+	},
+)
+
 func main() {
-	ctx := kong.Parse(&cli)
-	if cli.EBNF {
-		fmt.Println(parser.String())
-		ctx.Exit(0)
+
+	for _, t := range schema.Types {
+		fmt.Println(t.Name)
 	}
-	for _, file := range cli.Files {
-		ast := &ast.File{}
-		r, err := os.Open(file)
-		ctx.FatalIfErrorf(err)
-		err = parser.Parse("", r, ast)
-		r.Close()
-		repr.Println(ast)
-		ctx.FatalIfErrorf(err)
-	}
+
+	// cli := cli.NewCli()
+	// qm := &ast.File{}
+
+	// for _, file := range cli.Files {
+	// 	res, err := ioutil.ReadFile(file)
+	// 	check(err)
+
+	// 	err = parser.ParseString("", string(res), qm)
+	// 	check(err)
+
+	// 	toPrint, err := json.MarshalIndent(qm, "", "    ")
+	// 	check(err)
+	// 	fmt.Println(string(toPrint))
+	// 	// repr.Println(qm, repr.Indent("  "), repr.OmitEmpty(true))
+	// }
+
+	// 	err = parser.ParseString("", `
+	// package main
+
+	// component Main {
+	// 	prop name string = "test"
+	// }
+	// `, qm)
+
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+
 }
