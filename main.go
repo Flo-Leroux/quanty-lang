@@ -1,10 +1,12 @@
+// BASE ON https://github.com/vektah/gqlparser
+
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-
-	"github.com/vektah/gqlparser/v2"
-	gqlast "github.com/vektah/gqlparser/v2/ast"
+	"quanty/ast"
+	"quanty/parser"
 )
 
 func check(e error) {
@@ -13,29 +15,48 @@ func check(e error) {
 	}
 }
 
-var schema = gqlparser.MustLoadSchema(
-	&gqlast.Source{
-		Name: "test.graphql",
+// var schema = gqlparser.MustLoadSchema(
+// 	&gqlast.Source{
+// 		Name: "test.graphql",
+// 		Input: `
+// 		type User {
+// 			id: ID!
+// 			name: String!
+// 			photo: Picture
+// 		}
+
+// 		type Picture {
+// 			id: ID!
+// 			url: String!
+// 		}
+// 		`,
+// 	},
+// )
+
+var schema, err = parser.ParseFile(
+	&ast.Source{
+		Name: "component.qy",
 		Input: `
-		type User {
-			id: ID!
-			name: String!
-			photo: Picture
-		}
-		
-		type Picture {
-			id: ID!
-			url: String!
-		}
+			component Avatar {
+				div
+			}
 		`,
 	},
 )
 
 func main() {
 
-	for _, t := range schema.Types {
-		fmt.Println(t.Name)
+	if err != nil {
+		json, _ := json.MarshalIndent(err, "", "  ")
+		fmt.Print(string(json))
+	} else {
+		json, _ := json.MarshalIndent(schema, "", "  ")
+		fmt.Print(string(json))
 	}
+
+	// for _, t := range schema.Types {
+	// 	fmt.Println(t.Name)
+	// }
 
 	// cli := cli.NewCli()
 	// qm := &ast.File{}
