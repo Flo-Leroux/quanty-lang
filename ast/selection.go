@@ -16,12 +16,13 @@ func (s *FragmentSpread) GetPosition() *Position { return s.Position }
 func (s *InlineFragment) GetPosition() *Position { return s.Position }
 
 type Field struct {
-	Alias        string
-	Name         string
-	Arguments    ArgumentList
-	Directives   DirectiveList
-	SelectionSet SelectionSet
-	Position     *Position `dump:"-"`
+	Alias         string
+	Name          string
+	IsTextContent bool
+	Arguments     ArgumentList
+	Directives    DirectiveList
+	SelectionSet  SelectionSet
+	Position      *Position `dump:"-" json:"-"`
 
 	// Require validation
 	Definition       *FieldDefinition
@@ -31,7 +32,7 @@ type Field struct {
 type Argument struct {
 	Name     string
 	Value    *Value
-	Position *Position `dump:"-"`
+	Position *Position `dump:"-" json:"-"`
 }
 
 func (f *Field) ArgumentMap(vars map[string]interface{}) map[string]interface{} {

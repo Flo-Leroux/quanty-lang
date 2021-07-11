@@ -1,7 +1,7 @@
 GOCMD=go
 GOTEST=$(GOCMD) test
 GOVET=$(GOCMD) vet
-BINARY_NAME=example
+BINARY_NAME=quanty
 VERSION?=0.0.0
 SERVICE_PORT?=3000
 DOCKER_REGISTRY?= #if set it should finished by /
@@ -25,6 +25,7 @@ build: ## Build your project and put the output binary in out/bin/
 clean: ## Remove build related file
 	rm -fr ./bin
 	rm -fr ./out
+	rm -fr ./tmp
 	rm -f ./junit-report.xml checkstyle-report.xml ./coverage.xml ./profile.cov yamllint-checkstyle.xml
 
 vendor: ## Copy of all packages needed to support builds and tests in the vendor directory
