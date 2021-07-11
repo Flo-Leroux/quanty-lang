@@ -3,13 +3,12 @@ package ast
 type DefinitionKind string
 
 const (
-	Component DefinitionKind = "COMPONENT"
-	// Scalar      DefinitionKind = "SCALAR"
-	// Object      DefinitionKind = "OBJECT"
-	// Interface   DefinitionKind = "INTERFACE"
-	// Union       DefinitionKind = "UNION"
-	// Enum        DefinitionKind = "ENUM"
-	// InputObject DefinitionKind = "INPUT_OBJECT"
+	Scalar      DefinitionKind = "SCALAR"
+	Object      DefinitionKind = "OBJECT"
+	Interface   DefinitionKind = "INTERFACE"
+	Union       DefinitionKind = "UNION"
+	Enum        DefinitionKind = "ENUM"
+	InputObject DefinitionKind = "INPUT_OBJECT"
 )
 
 // ObjectDefinition is the core type definition object, it includes all of the definable types
@@ -21,34 +20,34 @@ const (
 //
 // Type extensions are also represented by this same struct.
 type Definition struct {
-	Kind DefinitionKind
-	// Description string
-	Name string
-	// Directives  DirectiveList
-	// Interfaces  []string      // object and input object
-	Fields FieldList // object and input object
-	// Types       []string      // union
-	// EnumValues  EnumValueList // enum
+	Kind        DefinitionKind
+	Description string
+	Name        string
+	Directives  DirectiveList
+	Interfaces  []string      // object and input object
+	Fields      FieldList     // object and input object
+	Types       []string      // union
+	EnumValues  EnumValueList // enum
 
 	Position *Position `dump:"-" json:"-"`
 	BuiltIn  bool      `dump:"-" json:"-"`
 }
 
-// func (d *Definition) IsLeafType() bool {
-// 	return d.Kind == Enum || d.Kind == Scalar
-// }
-
-// func (d *Definition) IsAbstractType() bool {
-// 	return d.Kind == Interface || d.Kind == Union
-// }
-
-func (d *Definition) IsCompositeType() bool {
-	return d.Kind == Component // || d.Kind == Interface || d.Kind == Union
+func (d *Definition) IsLeafType() bool {
+	return d.Kind == Enum || d.Kind == Scalar
 }
 
-// func (d *Definition) IsInputType() bool {
-// 	return d.Kind == Scalar || d.Kind == Enum || d.Kind == InputObject
-// }
+func (d *Definition) IsAbstractType() bool {
+	return d.Kind == Interface || d.Kind == Union
+}
+
+func (d *Definition) IsCompositeType() bool {
+	return d.Kind == Object || d.Kind == Interface || d.Kind == Union
+}
+
+func (d *Definition) IsInputType() bool {
+	return d.Kind == Scalar || d.Kind == Enum || d.Kind == InputObject
+}
 
 func (d *Definition) OneOf(types ...string) bool {
 	for _, t := range types {
@@ -60,36 +59,42 @@ func (d *Definition) OneOf(types ...string) bool {
 }
 
 type FieldDefinition struct {
-	// Description string
-	Name string
-	// Arguments    ArgumentDefinitionList // only for objects
-	// DefaultValue *Value                 // only for input objects
-	Type *Type
-	// Directives   DirectiveList
-	Position *Position `dump:"-" json:"-"`
+	Description  string
+	Name         string
+	Arguments    ArgumentDefinitionList // only for objects
+	DefaultValue *Value                 // only for input objects
+	Type         *Type
+	Directives   DirectiveList
+	Position     *Position `dump:"-" json:"-"`
 }
 
-// type ArgumentDefinition struct {
-// 	Description  string
-// 	Name         string
-// 	DefaultValue *Value
-// 	Type         *Type
-// 	Directives   DirectiveList
-// 	Position     *Position `dump:"-" json:"-"`
-// }
+type ArgumentDefinition struct {
+	Description  string
+	Name         string
+	DefaultValue *Value
+	Type         *Type
+	Directives   DirectiveList
+	Position     *Position `dump:"-" json:"-"`
+}
 
-// type EnumValueDefinition struct {
-// 	Description string
-// 	Name        string
-// 	Directives  DirectiveList
-// 	Position    *Position `dump:"-" json:"-"`
-// }
+type EnumValueDefinition struct {
+	Description string
+	Name        string
+	Directives  DirectiveList
+	Position    *Position `dump:"-" json:"-"`
+}
 
-// type DirectiveDefinition struct {
-// 	Description  string
-// 	Name         string
-// 	Arguments    ArgumentDefinitionList
-// 	Locations    []DirectiveLocation
-// 	IsRepeatable bool
-// 	Position     *Position `dump:"-" json:"-"`
-// }
+type DirectiveDefinition struct {
+	Description  string
+	Name         string
+	Arguments    ArgumentDefinitionList
+	Locations    []DirectiveLocation
+	IsRepeatable bool
+	Position     *Position `dump:"-" json:"-"`
+}
+
+type ImportFileDefinition struct {
+	Namespace string
+	Path      *Value
+	Position  *Position `dump:"-" json:"-"`
+}

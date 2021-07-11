@@ -37,8 +37,23 @@ var schema, err = parser.ParseFile(
 	&ast.Source{
 		Name: "component.qy",
 		Input: `
-			component Avatar {
-				div
+			import (
+				Button "./button.qy"
+				CounterState "./counter-state.qy"
+			)
+		
+			component QuantumComponent {
+				button(class: "test") {
+					"TEXT"
+				} 
+				div {
+					img(src: "http://test.com")
+				}
+				p {
+					span {
+						TEXT
+					}
+				}
 			}
 		`,
 	},

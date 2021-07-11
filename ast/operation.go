@@ -3,9 +3,8 @@ package ast
 type Operation string
 
 const (
-	Query        Operation = "query"
-	Mutation     Operation = "mutation"
-	Subscription Operation = "subscription"
+	Import    Operation = "import"
+	Component Operation = "component"
 )
 
 type OperationDefinition struct {
@@ -14,7 +13,13 @@ type OperationDefinition struct {
 	VariableDefinitions VariableDefinitionList
 	Directives          DirectiveList
 	SelectionSet        SelectionSet
-	Position            *Position `dump:"-"`
+	Position            *Position `dump:"-" json:"-"`
+}
+
+type ImportDefinition struct {
+	Operation Operation
+	Files     ImportFileList
+	Position  *Position `dump:"-" json:"-"`
 }
 
 type VariableDefinition struct {
@@ -22,9 +27,9 @@ type VariableDefinition struct {
 	Type         *Type
 	DefaultValue *Value
 	Directives   DirectiveList
-	Position     *Position `dump:"-"`
+	Position     *Position `dump:"-" json:"-"`
 
 	// Requires validation
 	Definition *Definition
-	Used       bool `dump:"-"`
+	Used       bool `dump:"-" json:"-"`
 }
