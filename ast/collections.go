@@ -57,8 +57,6 @@ func (l OperationList) ForName(name string) *OperationDefinition {
 	return nil
 }
 
-type ImportFileList []*ImportFileDefinition
-
 type FragmentDefinitionList []*FragmentDefinition
 
 func (l FragmentDefinitionList) ForName(name string) *FragmentDefinition {

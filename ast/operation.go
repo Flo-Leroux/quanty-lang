@@ -2,10 +2,10 @@ package ast
 
 type Operation string
 
-const (
-	Import    Operation = "import"
-	Component Operation = "component"
-)
+// const (
+// 	Import    Operation = "import"
+// 	Component Operation = "component"
+// )
 
 type OperationDefinition struct {
 	Operation           Operation

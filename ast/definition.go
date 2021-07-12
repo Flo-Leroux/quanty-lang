@@ -3,6 +3,8 @@ package ast
 type DefinitionKind string
 
 const (
+	Import      DefinitionKind = "IMPORT"
+	Component   DefinitionKind = "COMPONENT"
 	Scalar      DefinitionKind = "SCALAR"
 	Object      DefinitionKind = "OBJECT"
 	Interface   DefinitionKind = "INTERFACE"
@@ -91,10 +93,4 @@ type DirectiveDefinition struct {
 	Locations    []DirectiveLocation
 	IsRepeatable bool
 	Position     *Position `dump:"-" json:"-"`
-}
-
-type ImportFileDefinition struct {
-	Namespace string
-	Path      *Value
-	Position  *Position `dump:"-" json:"-"`
 }
