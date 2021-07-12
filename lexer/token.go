@@ -47,6 +47,7 @@ const (
 	// Keywords
 	Import
 	Component
+	Module
 )
 
 // func isWhitespace(ch rune) bool {
@@ -113,6 +114,8 @@ func (t Type) Name() string {
 		return "Import"
 	case Component:
 		return "Component"
+	case Module:
+		return "Module"
 	}
 	return "Unknown " + strconv.Itoa(int(t))
 }
@@ -167,6 +170,8 @@ func (t Type) String() string {
 		return "Import"
 	case Component:
 		return "Component"
+	case Module:
+		return "Module"
 	}
 	return "Unknown " + strconv.Itoa(int(t))
 }

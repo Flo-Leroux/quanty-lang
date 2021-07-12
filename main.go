@@ -3,7 +3,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"quanty/ast"
 	"quanty/parser"
@@ -37,22 +36,16 @@ var schema, err = parser.ParseFile(
 	&ast.Source{
 		Name: "component.qy",
 		Input: `
+			module main
+
 			import (
 				Button "./button.qy"
-				CounterState "./counter-state.qy"
+				Cpt "./captain.qy"
 			)
-		
-			component QuantumComponent {
-				button(class: "test") {
-					"TEXT"
-				} 
-				div {
-					img(src: "http://test.com")
-				}
-				p {
-					span {
-						TEXT
-					}
+
+			component Main {
+				div(class: "bg-red-500") {
+					"hello"
 				}
 			}
 		`,
@@ -61,13 +54,13 @@ var schema, err = parser.ParseFile(
 
 func main() {
 
+	var dumped string
 	if err != nil {
-		json, _ := json.MarshalIndent(err, "", "  ")
-		fmt.Print(string(json))
+		dumped = ast.Dump(err)
 	} else {
-		json, _ := json.MarshalIndent(schema, "", "  ")
-		fmt.Print(string(json))
+		dumped = ast.Dump(schema)
 	}
+	fmt.Print(dumped)
 
 	// for _, t := range schema.Types {
 	// 	fmt.Println(t.Name)
