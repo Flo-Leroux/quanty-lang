@@ -26,6 +26,7 @@ func NewCli() *Cli {
 		Context: ctx,
 	}
 
+	// cliArguments.Files = append(cliArguments.Files, "./example.qy")
 	cli.checkAndAssignFilesArgument()
 
 	return cli
