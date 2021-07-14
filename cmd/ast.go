@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"quanty/ast"
 	quantyerror "quanty/error"
 	"quanty/parser"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -31,7 +31,7 @@ import (
 
 // astCmd represents the ast command
 var astCmd = &cobra.Command{
-	Use:   "ast <...files>",
+	Use:   "ast <file|dir path>",
 	Short: "Print file's AST",
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
@@ -39,20 +39,32 @@ var astCmd = &cobra.Command{
 	// Cobra is a CLI library for Go that empowers applications.
 	// This application is a tool to generate the needed files
 	// to quickly create a Cobra application.`,
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.ExactArgs(1),
 	Version: "0.0.1",
 
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		for _, arg := range args {
-			info, err := os.Stat(arg)
-			if os.IsNotExist(err) {
-				return fmt.Errorf("Path [%s] doesn't exist", arg)
-			}
 
-			if !info.IsDir() && !strings.HasSuffix(arg, extension) {
-				return fmt.Errorf("[%s] isn't a Quanty file", arg)
+		path := args[0]
+		info, err := os.Stat(path)
+		if os.IsNotExist(err) {
+			return fmt.Errorf("Path [%s] doesn't exist", path)
+		}
+
+		if info.IsDir() {
+			var files []string
+			err := filepath.Walk(path, findFiles(&files))
+			if err != nil {
+				return fmt.Errorf("Not Quanty files found in [%s]", path)
 			}
 		}
+
+		// for _, arg := range args {
+		// 	info, err := os.Stat(arg)
+
+		// 	if info.IsDir() {
+		// 		return fmt.Errorf("[%s] isn't a Quanty file", arg)
+		// 	}
+		// }
 
 		if cmd.HasAvailableFlags() {
 			var flag *pflag.Flag
@@ -64,15 +76,7 @@ var astCmd = &cobra.Command{
 
 		return nil
 	},
-	PreRun: func(cmd *cobra.Command, args []string) {
-		for _, arg := range args {
-			info, _ := os.Stat(arg)
-			if info.IsDir() {
-				arg = fmt.Sprintf("%s/**/*.qy", arg)
-			}
-		}
-	},
-	Run: traverseFiles,
+	Run: run,
 }
 
 func init() {
@@ -91,11 +95,16 @@ func init() {
 	astCmd.Flags().StringP("format", "f", "dump", "Format to print <json|dump>")
 }
 
-func traverseFiles(cmd *cobra.Command, args []string) {
+func run(cmd *cobra.Command, args []string) {
+
+	path := args[0]
+
+	var files []string
+	filepath.Walk(path, findFiles(&files))
 
 	flagFormat := cmd.Flag("format").Value.String()
 
-	for _, file := range args {
+	for _, file := range files {
 		fileRead, errRead := ioutil.ReadFile(file)
 		check(errRead)
 
