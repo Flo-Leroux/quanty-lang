@@ -1,42 +1,22 @@
-// BASE ON https://github.com/vektah/gqlparser
+/*
+Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package main
 
-import (
-	"fmt"
-	"io/ioutil"
-	"quanty/ast"
-	. "quanty/cli"
-	"quanty/parser"
-)
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+import "quanty/cmd"
 
 func main() {
-
-	cli := NewCli()
-
-	for _, file := range cli.Files {
-		fileRead, errRead := ioutil.ReadFile(file)
-		check(errRead)
-
-		fileParsed, errParsed := parser.ParseFile(
-			&ast.Source{
-				Name:  file,
-				Input: string(fileRead),
-			},
-		)
-
-		var dumped string
-		if errParsed != nil {
-			dumped = ast.Dump(errParsed)
-		} else {
-			dumped = ast.Dump(fileParsed)
-		}
-		fmt.Print(dumped)
-	}
+	cmd.Execute()
 }
