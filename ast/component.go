@@ -6,5 +6,5 @@ type ComponentDefinition struct {
 	VariableDefinitions VariableDefinitionList
 	Directives          DirectiveList
 	SelectionSet        SelectionSet
-	Position            *Position `dump:"-"`
+	Position            *Position `dump:"-" json:"-"`
 }
