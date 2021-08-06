@@ -31,7 +31,7 @@ import (
 
 // astCmd represents the ast command
 var astCmd = &cobra.Command{
-	Use:   "ast <file|dir path>",
+	Use:   "ast <path>",
 	Short: "Print file's AST",
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
@@ -115,12 +115,6 @@ func run(cmd *cobra.Command, args []string) {
 			},
 		)
 		print(fileParsed, errParsed, flagFormat)
-	}
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
 	}
 }
 

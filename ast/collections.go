@@ -1,5 +1,9 @@
 package ast
 
+import (
+	"fmt"
+)
+
 type FieldList []*FieldDefinition
 
 func (l FieldList) ForName(name string) *FieldDefinition {
@@ -80,6 +84,16 @@ func (l VariableDefinitionList) ForName(name string) *VariableDefinition {
 }
 
 type ArgumentList []*Argument
+
+func (args ArgumentList) String() string {
+	str := ""
+
+	for _, arg := range args {
+		str += fmt.Sprintf("%s ", arg.String())
+	}
+
+	return str
+}
 
 func (l ArgumentList) ForName(name string) *Argument {
 	for _, it := range l {

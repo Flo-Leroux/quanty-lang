@@ -16,24 +16,43 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"quanty/build"
 
 	"github.com/spf13/cobra"
 )
 
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
-	Use:   "serve",
+	Use:   "serve <path>",
 	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	// 	Long: `A longer description that spans multiple lines and likely contains examples
+	// and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+	// Cobra is a CLI library for Go that empowers applications.
+	// This application is a tool to generate the needed files
+	// to quickly create a Cobra application.`,
+	// Args:    cobra.ExactArgs(1),
+	Version: "0.0.1",
+
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+
+		// path := args[0]
+		// info, err := os.Stat(path)
+		// if os.IsNotExist(err) {
+		// 	return fmt.Errorf("Path [%s] doesn't exist", path)
+		// }
+
+		// if info.IsDir() {
+		// 	var files []string
+		// 	err := filepath.Walk(path, findFiles(&files))
+		// 	if err != nil {
+		// 		return fmt.Errorf("Not Quanty files found in [%s]", path)
+		// 	}
+		// }
+
+		return nil
 	},
+	Run: serve,
 }
 
 func init() {
@@ -48,4 +67,11 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func serve(cmd *cobra.Command, args []string) {
+
+	// path := args[0]
+
+	build.Serve()
 }
