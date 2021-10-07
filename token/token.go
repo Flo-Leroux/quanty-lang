@@ -8,8 +8,12 @@ type Token struct {
 }
 
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF     = "EOF"
+	ILLEGAL       = "ILLEGAL"
+	EOF           = "EOF"
+	DOCUMENT      = "DOCUMENT"
+	SELECTION_SET = "SELECTION_SET"
+	TAG           = "TAG"
+	STRING        = "STRING"
 
 	// Identifiers + Literals
 	IDENT = "IDENT"
