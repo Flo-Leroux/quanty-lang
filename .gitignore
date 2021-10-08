@@ -4,5 +4,9 @@ tmp
 out
 vendor
 *.qy
-./parser/*
-!./parser/**/*.g4
+*.interp
+*.tokens
+*.java
+*.class
+parser/**/*
+!parser/**/*.g4
