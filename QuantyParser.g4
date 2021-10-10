@@ -1,13 +1,17 @@
-grammar QuantyParser;
+parser grammar QuantyParser;
 
-prog : component | EOF;
+options {
+    tokenVocab=QuantyLexer;
+}
 
-component : 'component' IDEN selectionset;
+prog : componentDef | EOF;
 
-selectionset : '{' tag* '}';
+componentDef : COMPONENT IDEN selectionSet;
 
-tag : IDEN (selectionset)?;
+selectionSet : LBRACE tag* RBRACE;
 
-IDEN : [a-zA-Z][a-zA-Z0-9]*;
+tag : IDEN argumentList? selectionSet?;
 
-WS : [ \r\n\t]+ -> skip;
+argumentList : LPAREN argument (COMMA argument)* RPAREN;
+
+argument : IDEN COLON STRING;
