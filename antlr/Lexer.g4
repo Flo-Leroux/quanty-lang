@@ -1,4 +1,4 @@
-lexer grammar QuantyLexer;
+lexer grammar Lexer;
 tokens { STRING }
 
 // KEYWORDS
@@ -8,25 +8,25 @@ COMPONENT : 'component';
 DQUOTE : '"' .*? '"' -> type(STRING);
 
 // COMMENTS
-BLOCK_COMMENT
-	: '/*' .*? '*/' -> channel(HIDDEN)
-	;
-LINE_COMMENT
-	: '//' ~[\r\n]* -> channel(HIDDEN)
-	;
+COMMENT : '#' ~[\r\n]* -> channel(HIDDEN);
 
 // BASE
+DOLLAR : '$';
 LBRACE : '{';
 RBRACE : '}';
 LPAREN : '(';
 RPAREN : ')';
 COMMA : ',';
 COLON : ':';
+DOT : '.';
 
-IDEN : [a-zA-Z][a-zA-Z0-9]*;
+IDEN : [a-zA-Z][a-zA-Z0-9_]*;
 
+ID : '"' [a-zA-Z][a-zA-Z0-9_-]* '"';
 INT : DIGIT+;
+FLOAT : DIGIT+('.'|',')DIGIT+;
+BOOLEAN : 'true' | 'false';
 
-fragment DIGIT: [0-9];
+fragment DIGIT : [0-9];
 
 WS : [ \r\n\t]+ -> channel(HIDDEN);

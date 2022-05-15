@@ -1,24 +1,25 @@
 # ALIAS
-antlr4 = java -Xmx500M -cp "/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool
-grun = java org.antlr.v4.gui.TestRig
-exportClass = export CLASSPATH=".:/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH"
-
-# VARIABLES
-name = Quanty
-expression = prog
+antlr4 = java -Xmx500M -cp "/usr/local/lib/antlr-4.10.1-complete.jar:$CLASSPATH" org.antlr.v4.Tool
+grun = java -Xmx500M -cp "/usr/local/lib/antlr-4.10.1-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig
+exportClass = export CLASSPATH=".:/usr/local/lib/antlr-4.10.1-complete.jar:$CLASSPATH"
 
 all: compile
 
 compile: clean
-	${exportClass} && ${antlr4} ${name}Lexer.g4 -o ./parser -Dlanguage=Go
-	${exportClass} && ${antlr4} ${name}Parser.g4 -o ./parser -Dlanguage=Go
+	cd ./antlr && ${exportClass} && ${antlr4} ./Lexer.g4 -o ./parser -Dlanguage=Go
+	cd ./antlr && ${exportClass} && ${antlr4} ./Parser.g4 -o ./parser -Dlanguage=Go
+	mv ./antlr/parser/_lexer.go ./antlr/parser/lexer.go
+	mv ./antlr/parser/_parser.go ./antlr/parser/parser.go
 
-debug: clean
-	${exportClass} && ${antlr4} ${name}Lexer.g4 -o ./debug
-	${exportClass} && ${antlr4} ${name}Parser.g4 -o ./debug -lib ./debug
-	${exportClass} && cd ./debug && javac ${name}*.java
-	${exportClass} && cd ./debug && ${grun} ${name} ${expression} -gui
+json:
+
+
+# debug: clean
+# 	${exportClass} && ${antlr4} ${name}Lexer.g4 -o ./debug
+# 	${exportClass} && ${antlr4} ${name}Parser.g4 -o ./debug -lib ./debug
+# 	${exportClass} && cd ./debug && javac ${name}*.java
+# 	${exportClass} && cd ./debug && ${grun} ${name} ${expression} -gui
 
 clean:
-	rm -f *.java *.tokens *.interp *.class
-	rm -rf ./debug
+	rm -rf ./antlr/.antlr
+	rm -rf ./antlr/parser
