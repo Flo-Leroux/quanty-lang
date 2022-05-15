@@ -16,5 +16,9 @@ func NewQuantyListener() *QuantyListener {
 }
 
 func (ql *QuantyListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
-	fmt.Println(ctx.GetText())
+	// fmt.Println(ctx.GetText())
+}
+
+func (ql *QuantyListener) EnterTagDef(ctx parser.TagDefContext) {
+	fmt.Println(ctx.IDEN())
 }
