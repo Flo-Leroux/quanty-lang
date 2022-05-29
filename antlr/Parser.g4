@@ -4,7 +4,9 @@ options {
     tokenVocab=Lexer;
 }
 
-document : componentDef+ | EOF;
+file : moduleDef componentDef+ | EOF;
+
+moduleDef : MODULE name=IDEN;
 
 componentDef : COMPONENT name=IDEN variableDefList? selectionSet;
 
@@ -14,10 +16,13 @@ variableDef : variable COLON dataType=IDEN;
 
 variable : DOLLAR IDEN;
 
-selectionSet : LBRACE (tagDef|STRING)+ RBRACE;
+selectionSet : LBRACE selection+ RBRACE;
+
+selection : STRING # selectString
+    | tagDef # selectTag;
 
 tagDef : IDEN argumentList? selectionSet?;
 
 argumentList : LPAREN arguments+=argument (COMMA arguments+=argument)* RPAREN;
 
-argument : IDEN COLON STRING;
+argument : key=IDEN COLON value=STRING;

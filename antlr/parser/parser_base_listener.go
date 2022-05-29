@@ -21,11 +21,17 @@ func (s *BaseParserListener) EnterEveryRule(ctx antlr.ParserRuleContext) {}
 // ExitEveryRule is called when any rule is exited.
 func (s *BaseParserListener) ExitEveryRule(ctx antlr.ParserRuleContext) {}
 
-// EnterDocument is called when production document is entered.
-func (s *BaseParserListener) EnterDocument(ctx *DocumentContext) {}
+// EnterFile is called when production file is entered.
+func (s *BaseParserListener) EnterFile(ctx *FileContext) {}
 
-// ExitDocument is called when production document is exited.
-func (s *BaseParserListener) ExitDocument(ctx *DocumentContext) {}
+// ExitFile is called when production file is exited.
+func (s *BaseParserListener) ExitFile(ctx *FileContext) {}
+
+// EnterModuleDef is called when production moduleDef is entered.
+func (s *BaseParserListener) EnterModuleDef(ctx *ModuleDefContext) {}
+
+// ExitModuleDef is called when production moduleDef is exited.
+func (s *BaseParserListener) ExitModuleDef(ctx *ModuleDefContext) {}
 
 // EnterComponentDef is called when production componentDef is entered.
 func (s *BaseParserListener) EnterComponentDef(ctx *ComponentDefContext) {}
@@ -56,6 +62,18 @@ func (s *BaseParserListener) EnterSelectionSet(ctx *SelectionSetContext) {}
 
 // ExitSelectionSet is called when production selectionSet is exited.
 func (s *BaseParserListener) ExitSelectionSet(ctx *SelectionSetContext) {}
+
+// EnterSelectString is called when production selectString is entered.
+func (s *BaseParserListener) EnterSelectString(ctx *SelectStringContext) {}
+
+// ExitSelectString is called when production selectString is exited.
+func (s *BaseParserListener) ExitSelectString(ctx *SelectStringContext) {}
+
+// EnterSelectTag is called when production selectTag is entered.
+func (s *BaseParserListener) EnterSelectTag(ctx *SelectTagContext) {}
+
+// ExitSelectTag is called when production selectTag is exited.
+func (s *BaseParserListener) ExitSelectTag(ctx *SelectTagContext) {}
 
 // EnterTagDef is called when production tagDef is entered.
 func (s *BaseParserListener) EnterTagDef(ctx *TagDefContext) {}

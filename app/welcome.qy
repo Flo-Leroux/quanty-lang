@@ -1,0 +1,30 @@
+module Welcome
+
+component Main {
+    header(class: "p-0") {
+        nav {
+            ul {
+                li {
+                    a(href: "/") {
+                        "Home"
+                    }
+                    a(href: "/welcome") {
+                        "Welcome"
+                    }
+                }
+            }
+            ul {
+                li {
+                    a(href: "/contact") {
+                        "Contact"
+                    }
+                }
+            }
+        }
+    }
+    main {
+        h1 {
+            "Welcome page!"
+        }
+    }
+}

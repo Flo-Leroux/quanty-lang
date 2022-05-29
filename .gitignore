@@ -3,10 +3,6 @@
 tmp
 out
 vendor
-*.qy
-*.interp
-*.tokens
-*.java
-*.class
-parser/**/*
-!parser/**/*.g4
+./antlr/parser
+./antlr/.antlr
+.env

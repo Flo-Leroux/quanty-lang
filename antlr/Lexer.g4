@@ -1,7 +1,9 @@
 lexer grammar Lexer;
+
 tokens { STRING }
 
 // KEYWORDS
+MODULE : 'module';
 COMPONENT : 'component';
 
 // STRINGS

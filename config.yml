@@ -1,0 +1,19 @@
+rootDir: ./app
+
+server:
+  host: 127.0.0.1
+  port: 3000
+  timeout:
+    server: 30
+    read: 15
+    write: 10
+    idle: 5
+
+application:
+  routes:
+    - path: /
+      module: Main
+    - path: /welcome
+      module: Welcome
+    - path: /contact
+      module: Contact

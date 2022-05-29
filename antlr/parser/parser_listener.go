@@ -8,8 +8,11 @@ import "github.com/antlr/antlr4/runtime/Go/antlr"
 type ParserListener interface {
 	antlr.ParseTreeListener
 
-	// EnterDocument is called when entering the document production.
-	EnterDocument(c *DocumentContext)
+	// EnterFile is called when entering the file production.
+	EnterFile(c *FileContext)
+
+	// EnterModuleDef is called when entering the moduleDef production.
+	EnterModuleDef(c *ModuleDefContext)
 
 	// EnterComponentDef is called when entering the componentDef production.
 	EnterComponentDef(c *ComponentDefContext)
@@ -26,6 +29,12 @@ type ParserListener interface {
 	// EnterSelectionSet is called when entering the selectionSet production.
 	EnterSelectionSet(c *SelectionSetContext)
 
+	// EnterSelectString is called when entering the selectString production.
+	EnterSelectString(c *SelectStringContext)
+
+	// EnterSelectTag is called when entering the selectTag production.
+	EnterSelectTag(c *SelectTagContext)
+
 	// EnterTagDef is called when entering the tagDef production.
 	EnterTagDef(c *TagDefContext)
 
@@ -35,8 +44,11 @@ type ParserListener interface {
 	// EnterArgument is called when entering the argument production.
 	EnterArgument(c *ArgumentContext)
 
-	// ExitDocument is called when exiting the document production.
-	ExitDocument(c *DocumentContext)
+	// ExitFile is called when exiting the file production.
+	ExitFile(c *FileContext)
+
+	// ExitModuleDef is called when exiting the moduleDef production.
+	ExitModuleDef(c *ModuleDefContext)
 
 	// ExitComponentDef is called when exiting the componentDef production.
 	ExitComponentDef(c *ComponentDefContext)
@@ -52,6 +64,12 @@ type ParserListener interface {
 
 	// ExitSelectionSet is called when exiting the selectionSet production.
 	ExitSelectionSet(c *SelectionSetContext)
+
+	// ExitSelectString is called when exiting the selectString production.
+	ExitSelectString(c *SelectStringContext)
+
+	// ExitSelectTag is called when exiting the selectTag production.
+	ExitSelectTag(c *SelectTagContext)
 
 	// ExitTagDef is called when exiting the tagDef production.
 	ExitTagDef(c *TagDefContext)

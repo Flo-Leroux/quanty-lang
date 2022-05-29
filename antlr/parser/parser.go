@@ -33,52 +33,56 @@ var parserParserStaticData struct {
 func parserParserInit() {
 	staticData := &parserParserStaticData
 	staticData.literalNames = []string{
-		"", "", "'component'", "", "'$'", "'{'", "'}'", "'('", "')'", "','",
-		"':'", "'.'",
+		"", "", "'module'", "'component'", "", "'$'", "'{'", "'}'", "'('", "')'",
+		"','", "':'", "'.'",
 	}
 	staticData.symbolicNames = []string{
-		"", "STRING", "COMPONENT", "COMMENT", "DOLLAR", "LBRACE", "RBRACE",
-		"LPAREN", "RPAREN", "COMMA", "COLON", "DOT", "IDEN", "ID", "INT", "FLOAT",
-		"BOOLEAN", "WS",
+		"", "STRING", "MODULE", "COMPONENT", "COMMENT", "DOLLAR", "LBRACE",
+		"RBRACE", "LPAREN", "RPAREN", "COMMA", "COLON", "DOT", "IDEN", "ID",
+		"INT", "FLOAT", "BOOLEAN", "WS",
 	}
 	staticData.ruleNames = []string{
-		"document", "componentDef", "variableDefList", "variableDef", "variable",
-		"selectionSet", "tagDef", "argumentList", "argument",
+		"file", "moduleDef", "componentDef", "variableDefList", "variableDef",
+		"variable", "selectionSet", "selection", "tagDef", "argumentList", "argument",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 17, 83, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
-		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 1, 0, 4, 0, 20, 8, 0,
-		11, 0, 12, 0, 21, 1, 0, 3, 0, 25, 8, 0, 1, 1, 1, 1, 1, 1, 3, 1, 30, 8,
-		1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 5, 2, 38, 8, 2, 10, 2, 12, 2, 41,
-		9, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5,
-		1, 5, 4, 5, 55, 8, 5, 11, 5, 12, 5, 56, 1, 5, 1, 5, 1, 6, 1, 6, 3, 6, 63,
-		8, 6, 1, 6, 3, 6, 66, 8, 6, 1, 7, 1, 7, 1, 7, 1, 7, 5, 7, 72, 8, 7, 10,
-		7, 12, 7, 75, 9, 7, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 0, 0, 9,
-		0, 2, 4, 6, 8, 10, 12, 14, 16, 0, 0, 82, 0, 24, 1, 0, 0, 0, 2, 26, 1, 0,
-		0, 0, 4, 33, 1, 0, 0, 0, 6, 44, 1, 0, 0, 0, 8, 48, 1, 0, 0, 0, 10, 51,
-		1, 0, 0, 0, 12, 60, 1, 0, 0, 0, 14, 67, 1, 0, 0, 0, 16, 78, 1, 0, 0, 0,
-		18, 20, 3, 2, 1, 0, 19, 18, 1, 0, 0, 0, 20, 21, 1, 0, 0, 0, 21, 19, 1,
-		0, 0, 0, 21, 22, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0, 23, 25, 5, 0, 0, 1, 24,
-		19, 1, 0, 0, 0, 24, 23, 1, 0, 0, 0, 25, 1, 1, 0, 0, 0, 26, 27, 5, 2, 0,
-		0, 27, 29, 5, 12, 0, 0, 28, 30, 3, 4, 2, 0, 29, 28, 1, 0, 0, 0, 29, 30,
-		1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 32, 3, 10, 5, 0, 32, 3, 1, 0, 0, 0,
-		33, 34, 5, 7, 0, 0, 34, 39, 3, 6, 3, 0, 35, 36, 5, 9, 0, 0, 36, 38, 3,
-		6, 3, 0, 37, 35, 1, 0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1, 0, 0, 0, 39,
-		40, 1, 0, 0, 0, 40, 42, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42, 43, 5, 8, 0,
-		0, 43, 5, 1, 0, 0, 0, 44, 45, 3, 8, 4, 0, 45, 46, 5, 10, 0, 0, 46, 47,
-		5, 12, 0, 0, 47, 7, 1, 0, 0, 0, 48, 49, 5, 4, 0, 0, 49, 50, 5, 12, 0, 0,
-		50, 9, 1, 0, 0, 0, 51, 54, 5, 5, 0, 0, 52, 55, 3, 12, 6, 0, 53, 55, 5,
-		1, 0, 0, 54, 52, 1, 0, 0, 0, 54, 53, 1, 0, 0, 0, 55, 56, 1, 0, 0, 0, 56,
-		54, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0, 57, 58, 1, 0, 0, 0, 58, 59, 5, 6, 0,
-		0, 59, 11, 1, 0, 0, 0, 60, 62, 5, 12, 0, 0, 61, 63, 3, 14, 7, 0, 62, 61,
-		1, 0, 0, 0, 62, 63, 1, 0, 0, 0, 63, 65, 1, 0, 0, 0, 64, 66, 3, 10, 5, 0,
-		65, 64, 1, 0, 0, 0, 65, 66, 1, 0, 0, 0, 66, 13, 1, 0, 0, 0, 67, 68, 5,
-		7, 0, 0, 68, 73, 3, 16, 8, 0, 69, 70, 5, 9, 0, 0, 70, 72, 3, 16, 8, 0,
-		71, 69, 1, 0, 0, 0, 72, 75, 1, 0, 0, 0, 73, 71, 1, 0, 0, 0, 73, 74, 1,
-		0, 0, 0, 74, 76, 1, 0, 0, 0, 75, 73, 1, 0, 0, 0, 76, 77, 5, 8, 0, 0, 77,
-		15, 1, 0, 0, 0, 78, 79, 5, 12, 0, 0, 79, 80, 5, 10, 0, 0, 80, 81, 5, 1,
-		0, 0, 81, 17, 1, 0, 0, 0, 9, 21, 24, 29, 39, 54, 56, 62, 65, 73,
+		4, 1, 18, 94, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
+		10, 1, 0, 1, 0, 4, 0, 25, 8, 0, 11, 0, 12, 0, 26, 1, 0, 3, 0, 30, 8, 0,
+		1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 3, 2, 38, 8, 2, 1, 2, 1, 2, 1, 3, 1,
+		3, 1, 3, 1, 3, 5, 3, 46, 8, 3, 10, 3, 12, 3, 49, 9, 3, 1, 3, 1, 3, 1, 4,
+		1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 4, 6, 62, 8, 6, 11, 6,
+		12, 6, 63, 1, 6, 1, 6, 1, 7, 1, 7, 3, 7, 70, 8, 7, 1, 8, 1, 8, 3, 8, 74,
+		8, 8, 1, 8, 3, 8, 77, 8, 8, 1, 9, 1, 9, 1, 9, 1, 9, 5, 9, 83, 8, 9, 10,
+		9, 12, 9, 86, 9, 9, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 0, 0,
+		11, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 0, 0, 91, 0, 29, 1, 0, 0, 0,
+		2, 31, 1, 0, 0, 0, 4, 34, 1, 0, 0, 0, 6, 41, 1, 0, 0, 0, 8, 52, 1, 0, 0,
+		0, 10, 56, 1, 0, 0, 0, 12, 59, 1, 0, 0, 0, 14, 69, 1, 0, 0, 0, 16, 71,
+		1, 0, 0, 0, 18, 78, 1, 0, 0, 0, 20, 89, 1, 0, 0, 0, 22, 24, 3, 2, 1, 0,
+		23, 25, 3, 4, 2, 0, 24, 23, 1, 0, 0, 0, 25, 26, 1, 0, 0, 0, 26, 24, 1,
+		0, 0, 0, 26, 27, 1, 0, 0, 0, 27, 30, 1, 0, 0, 0, 28, 30, 5, 0, 0, 1, 29,
+		22, 1, 0, 0, 0, 29, 28, 1, 0, 0, 0, 30, 1, 1, 0, 0, 0, 31, 32, 5, 2, 0,
+		0, 32, 33, 5, 13, 0, 0, 33, 3, 1, 0, 0, 0, 34, 35, 5, 3, 0, 0, 35, 37,
+		5, 13, 0, 0, 36, 38, 3, 6, 3, 0, 37, 36, 1, 0, 0, 0, 37, 38, 1, 0, 0, 0,
+		38, 39, 1, 0, 0, 0, 39, 40, 3, 12, 6, 0, 40, 5, 1, 0, 0, 0, 41, 42, 5,
+		8, 0, 0, 42, 47, 3, 8, 4, 0, 43, 44, 5, 10, 0, 0, 44, 46, 3, 8, 4, 0, 45,
+		43, 1, 0, 0, 0, 46, 49, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 47, 48, 1, 0, 0,
+		0, 48, 50, 1, 0, 0, 0, 49, 47, 1, 0, 0, 0, 50, 51, 5, 9, 0, 0, 51, 7, 1,
+		0, 0, 0, 52, 53, 3, 10, 5, 0, 53, 54, 5, 11, 0, 0, 54, 55, 5, 13, 0, 0,
+		55, 9, 1, 0, 0, 0, 56, 57, 5, 5, 0, 0, 57, 58, 5, 13, 0, 0, 58, 11, 1,
+		0, 0, 0, 59, 61, 5, 6, 0, 0, 60, 62, 3, 14, 7, 0, 61, 60, 1, 0, 0, 0, 62,
+		63, 1, 0, 0, 0, 63, 61, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64, 65, 1, 0, 0,
+		0, 65, 66, 5, 7, 0, 0, 66, 13, 1, 0, 0, 0, 67, 70, 5, 1, 0, 0, 68, 70,
+		3, 16, 8, 0, 69, 67, 1, 0, 0, 0, 69, 68, 1, 0, 0, 0, 70, 15, 1, 0, 0, 0,
+		71, 73, 5, 13, 0, 0, 72, 74, 3, 18, 9, 0, 73, 72, 1, 0, 0, 0, 73, 74, 1,
+		0, 0, 0, 74, 76, 1, 0, 0, 0, 75, 77, 3, 12, 6, 0, 76, 75, 1, 0, 0, 0, 76,
+		77, 1, 0, 0, 0, 77, 17, 1, 0, 0, 0, 78, 79, 5, 8, 0, 0, 79, 84, 3, 20,
+		10, 0, 80, 81, 5, 10, 0, 0, 81, 83, 3, 20, 10, 0, 82, 80, 1, 0, 0, 0, 83,
+		86, 1, 0, 0, 0, 84, 82, 1, 0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 87, 1, 0, 0,
+		0, 86, 84, 1, 0, 0, 0, 87, 88, 5, 9, 0, 0, 88, 19, 1, 0, 0, 0, 89, 90,
+		5, 13, 0, 0, 90, 91, 5, 11, 0, 0, 91, 92, 5, 1, 0, 0, 92, 21, 1, 0, 0,
+		0, 9, 26, 29, 37, 47, 63, 69, 73, 76, 84,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -118,76 +122,95 @@ func NewParser(input antlr.TokenStream) *Parser {
 const (
 	ParserEOF       = antlr.TokenEOF
 	ParserSTRING    = 1
-	ParserCOMPONENT = 2
-	ParserCOMMENT   = 3
-	ParserDOLLAR    = 4
-	ParserLBRACE    = 5
-	ParserRBRACE    = 6
-	ParserLPAREN    = 7
-	ParserRPAREN    = 8
-	ParserCOMMA     = 9
-	ParserCOLON     = 10
-	ParserDOT       = 11
-	ParserIDEN      = 12
-	ParserID        = 13
-	ParserINT       = 14
-	ParserFLOAT     = 15
-	ParserBOOLEAN   = 16
-	ParserWS        = 17
+	ParserMODULE    = 2
+	ParserCOMPONENT = 3
+	ParserCOMMENT   = 4
+	ParserDOLLAR    = 5
+	ParserLBRACE    = 6
+	ParserRBRACE    = 7
+	ParserLPAREN    = 8
+	ParserRPAREN    = 9
+	ParserCOMMA     = 10
+	ParserCOLON     = 11
+	ParserDOT       = 12
+	ParserIDEN      = 13
+	ParserID        = 14
+	ParserINT       = 15
+	ParserFLOAT     = 16
+	ParserBOOLEAN   = 17
+	ParserWS        = 18
 )
 
 // Parser rules.
 const (
-	ParserRULE_document        = 0
-	ParserRULE_componentDef    = 1
-	ParserRULE_variableDefList = 2
-	ParserRULE_variableDef     = 3
-	ParserRULE_variable        = 4
-	ParserRULE_selectionSet    = 5
-	ParserRULE_tagDef          = 6
-	ParserRULE_argumentList    = 7
-	ParserRULE_argument        = 8
+	ParserRULE_file            = 0
+	ParserRULE_moduleDef       = 1
+	ParserRULE_componentDef    = 2
+	ParserRULE_variableDefList = 3
+	ParserRULE_variableDef     = 4
+	ParserRULE_variable        = 5
+	ParserRULE_selectionSet    = 6
+	ParserRULE_selection       = 7
+	ParserRULE_tagDef          = 8
+	ParserRULE_argumentList    = 9
+	ParserRULE_argument        = 10
 )
 
-// IDocumentContext is an interface to support dynamic dispatch.
-type IDocumentContext interface {
+// IFileContext is an interface to support dynamic dispatch.
+type IFileContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsDocumentContext differentiates from other interfaces.
-	IsDocumentContext()
+	// IsFileContext differentiates from other interfaces.
+	IsFileContext()
 }
 
-type DocumentContext struct {
+type FileContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyDocumentContext() *DocumentContext {
-	var p = new(DocumentContext)
+func NewEmptyFileContext() *FileContext {
+	var p = new(FileContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ParserRULE_document
+	p.RuleIndex = ParserRULE_file
 	return p
 }
 
-func (*DocumentContext) IsDocumentContext() {}
+func (*FileContext) IsFileContext() {}
 
-func NewDocumentContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *DocumentContext {
-	var p = new(DocumentContext)
+func NewFileContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FileContext {
+	var p = new(FileContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ParserRULE_document
+	p.RuleIndex = ParserRULE_file
 
 	return p
 }
 
-func (s *DocumentContext) GetParser() antlr.Parser { return s.parser }
+func (s *FileContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *DocumentContext) AllComponentDef() []IComponentDefContext {
+func (s *FileContext) ModuleDef() IModuleDefContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IModuleDefContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IModuleDefContext)
+}
+
+func (s *FileContext) AllComponentDef() []IComponentDefContext {
 	children := s.GetChildren()
 	len := 0
 	for _, ctx := range children {
@@ -208,7 +231,7 @@ func (s *DocumentContext) AllComponentDef() []IComponentDefContext {
 	return tst
 }
 
-func (s *DocumentContext) ComponentDef(i int) IComponentDefContext {
+func (s *FileContext) ComponentDef(i int) IComponentDefContext {
 	var t antlr.RuleContext
 	j := 0
 	for _, ctx := range s.GetChildren() {
@@ -228,36 +251,46 @@ func (s *DocumentContext) ComponentDef(i int) IComponentDefContext {
 	return t.(IComponentDefContext)
 }
 
-func (s *DocumentContext) EOF() antlr.TerminalNode {
+func (s *FileContext) EOF() antlr.TerminalNode {
 	return s.GetToken(ParserEOF, 0)
 }
 
-func (s *DocumentContext) GetRuleContext() antlr.RuleContext {
+func (s *FileContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *DocumentContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *FileContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *DocumentContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *FileContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ParserListener); ok {
-		listenerT.EnterDocument(s)
+		listenerT.EnterFile(s)
 	}
 }
 
-func (s *DocumentContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *FileContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ParserListener); ok {
-		listenerT.ExitDocument(s)
+		listenerT.ExitFile(s)
 	}
 }
 
-func (p *Parser) Document() (localctx IDocumentContext) {
+func (s *FileContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitFile(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *Parser) File() (localctx IFileContext) {
 	this := p
 	_ = this
 
-	localctx = NewDocumentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 0, ParserRULE_document)
+	localctx = NewFileContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 0, ParserRULE_file)
 	var _la int
 
 	defer func() {
@@ -276,23 +309,27 @@ func (p *Parser) Document() (localctx IDocumentContext) {
 		}
 	}()
 
-	p.SetState(24)
+	p.SetState(29)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case ParserCOMPONENT:
+	case ParserMODULE:
 		p.EnterOuterAlt(localctx, 1)
-		p.SetState(19)
+		{
+			p.SetState(22)
+			p.ModuleDef()
+		}
+		p.SetState(24)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		for ok := true; ok; ok = _la == ParserCOMPONENT {
 			{
-				p.SetState(18)
+				p.SetState(23)
 				p.ComponentDef()
 			}
 
-			p.SetState(21)
+			p.SetState(26)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 		}
@@ -300,12 +337,138 @@ func (p *Parser) Document() (localctx IDocumentContext) {
 	case ParserEOF:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(23)
+			p.SetState(28)
 			p.Match(ParserEOF)
 		}
 
 	default:
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	}
+
+	return localctx
+}
+
+// IModuleDefContext is an interface to support dynamic dispatch.
+type IModuleDefContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetName returns the name token.
+	GetName() antlr.Token
+
+	// SetName sets the name token.
+	SetName(antlr.Token)
+
+	// IsModuleDefContext differentiates from other interfaces.
+	IsModuleDefContext()
+}
+
+type ModuleDefContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	name   antlr.Token
+}
+
+func NewEmptyModuleDefContext() *ModuleDefContext {
+	var p = new(ModuleDefContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ParserRULE_moduleDef
+	return p
+}
+
+func (*ModuleDefContext) IsModuleDefContext() {}
+
+func NewModuleDefContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ModuleDefContext {
+	var p = new(ModuleDefContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ParserRULE_moduleDef
+
+	return p
+}
+
+func (s *ModuleDefContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ModuleDefContext) GetName() antlr.Token { return s.name }
+
+func (s *ModuleDefContext) SetName(v antlr.Token) { s.name = v }
+
+func (s *ModuleDefContext) MODULE() antlr.TerminalNode {
+	return s.GetToken(ParserMODULE, 0)
+}
+
+func (s *ModuleDefContext) IDEN() antlr.TerminalNode {
+	return s.GetToken(ParserIDEN, 0)
+}
+
+func (s *ModuleDefContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ModuleDefContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ModuleDefContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.EnterModuleDef(s)
+	}
+}
+
+func (s *ModuleDefContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.ExitModuleDef(s)
+	}
+}
+
+func (s *ModuleDefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitModuleDef(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *Parser) ModuleDef() (localctx IModuleDefContext) {
+	this := p
+	_ = this
+
+	localctx = NewModuleDefContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 2, ParserRULE_moduleDef)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(31)
+		p.Match(ParserMODULE)
+	}
+	{
+		p.SetState(32)
+
+		var _m = p.Match(ParserIDEN)
+
+		localctx.(*ModuleDefContext).name = _m
 	}
 
 	return localctx
@@ -420,12 +583,22 @@ func (s *ComponentDefContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ComponentDefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitComponentDef(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) ComponentDef() (localctx IComponentDefContext) {
 	this := p
 	_ = this
 
 	localctx = NewComponentDefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, ParserRULE_componentDef)
+	p.EnterRule(localctx, 4, ParserRULE_componentDef)
 	var _la int
 
 	defer func() {
@@ -446,29 +619,29 @@ func (p *Parser) ComponentDef() (localctx IComponentDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(26)
+		p.SetState(34)
 		p.Match(ParserCOMPONENT)
 	}
 	{
-		p.SetState(27)
+		p.SetState(35)
 
 		var _m = p.Match(ParserIDEN)
 
 		localctx.(*ComponentDefContext).name = _m
 	}
-	p.SetState(29)
+	p.SetState(37)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == ParserLPAREN {
 		{
-			p.SetState(28)
+			p.SetState(36)
 			p.VariableDefList()
 		}
 
 	}
 	{
-		p.SetState(31)
+		p.SetState(39)
 		p.SelectionSet()
 	}
 
@@ -612,12 +785,22 @@ func (s *VariableDefListContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *VariableDefListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitVariableDefList(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) VariableDefList() (localctx IVariableDefListContext) {
 	this := p
 	_ = this
 
 	localctx = NewVariableDefListContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, ParserRULE_variableDefList)
+	p.EnterRule(localctx, 6, ParserRULE_variableDefList)
 	var _la int
 
 	defer func() {
@@ -638,28 +821,28 @@ func (p *Parser) VariableDefList() (localctx IVariableDefListContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(33)
+		p.SetState(41)
 		p.Match(ParserLPAREN)
 	}
 	{
-		p.SetState(34)
+		p.SetState(42)
 
 		var _x = p.VariableDef()
 
 		localctx.(*VariableDefListContext)._variableDef = _x
 	}
 	localctx.(*VariableDefListContext).variables = append(localctx.(*VariableDefListContext).variables, localctx.(*VariableDefListContext)._variableDef)
-	p.SetState(39)
+	p.SetState(47)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == ParserCOMMA {
 		{
-			p.SetState(35)
+			p.SetState(43)
 			p.Match(ParserCOMMA)
 		}
 		{
-			p.SetState(36)
+			p.SetState(44)
 
 			var _x = p.VariableDef()
 
@@ -667,12 +850,12 @@ func (p *Parser) VariableDefList() (localctx IVariableDefListContext) {
 		}
 		localctx.(*VariableDefListContext).variables = append(localctx.(*VariableDefListContext).variables, localctx.(*VariableDefListContext)._variableDef)
 
-		p.SetState(41)
+		p.SetState(49)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(42)
+		p.SetState(50)
 		p.Match(ParserRPAREN)
 	}
 
@@ -772,12 +955,22 @@ func (s *VariableDefContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *VariableDefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitVariableDef(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) VariableDef() (localctx IVariableDefContext) {
 	this := p
 	_ = this
 
 	localctx = NewVariableDefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, ParserRULE_variableDef)
+	p.EnterRule(localctx, 8, ParserRULE_variableDef)
 
 	defer func() {
 		p.ExitRule()
@@ -797,15 +990,15 @@ func (p *Parser) VariableDef() (localctx IVariableDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(44)
+		p.SetState(52)
 		p.Variable()
 	}
 	{
-		p.SetState(45)
+		p.SetState(53)
 		p.Match(ParserCOLON)
 	}
 	{
-		p.SetState(46)
+		p.SetState(54)
 
 		var _m = p.Match(ParserIDEN)
 
@@ -881,12 +1074,22 @@ func (s *VariableContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *VariableContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitVariable(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) Variable() (localctx IVariableContext) {
 	this := p
 	_ = this
 
 	localctx = NewVariableContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, ParserRULE_variable)
+	p.EnterRule(localctx, 10, ParserRULE_variable)
 
 	defer func() {
 		p.ExitRule()
@@ -906,11 +1109,11 @@ func (p *Parser) Variable() (localctx IVariableContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(48)
+		p.SetState(56)
 		p.Match(ParserDOLLAR)
 	}
 	{
-		p.SetState(49)
+		p.SetState(57)
 		p.Match(ParserIDEN)
 	}
 
@@ -963,20 +1166,20 @@ func (s *SelectionSetContext) RBRACE() antlr.TerminalNode {
 	return s.GetToken(ParserRBRACE, 0)
 }
 
-func (s *SelectionSetContext) AllTagDef() []ITagDefContext {
+func (s *SelectionSetContext) AllSelection() []ISelectionContext {
 	children := s.GetChildren()
 	len := 0
 	for _, ctx := range children {
-		if _, ok := ctx.(ITagDefContext); ok {
+		if _, ok := ctx.(ISelectionContext); ok {
 			len++
 		}
 	}
 
-	tst := make([]ITagDefContext, len)
+	tst := make([]ISelectionContext, len)
 	i := 0
 	for _, ctx := range children {
-		if t, ok := ctx.(ITagDefContext); ok {
-			tst[i] = t.(ITagDefContext)
+		if t, ok := ctx.(ISelectionContext); ok {
+			tst[i] = t.(ISelectionContext)
 			i++
 		}
 	}
@@ -984,11 +1187,11 @@ func (s *SelectionSetContext) AllTagDef() []ITagDefContext {
 	return tst
 }
 
-func (s *SelectionSetContext) TagDef(i int) ITagDefContext {
+func (s *SelectionSetContext) Selection(i int) ISelectionContext {
 	var t antlr.RuleContext
 	j := 0
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(ITagDefContext); ok {
+		if _, ok := ctx.(ISelectionContext); ok {
 			if j == i {
 				t = ctx.(antlr.RuleContext)
 				break
@@ -1001,15 +1204,7 @@ func (s *SelectionSetContext) TagDef(i int) ITagDefContext {
 		return nil
 	}
 
-	return t.(ITagDefContext)
-}
-
-func (s *SelectionSetContext) AllSTRING() []antlr.TerminalNode {
-	return s.GetTokens(ParserSTRING)
-}
-
-func (s *SelectionSetContext) STRING(i int) antlr.TerminalNode {
-	return s.GetToken(ParserSTRING, i)
+	return t.(ISelectionContext)
 }
 
 func (s *SelectionSetContext) GetRuleContext() antlr.RuleContext {
@@ -1032,12 +1227,22 @@ func (s *SelectionSetContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *SelectionSetContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitSelectionSet(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) SelectionSet() (localctx ISelectionSetContext) {
 	this := p
 	_ = this
 
 	localctx = NewSelectionSetContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, ParserRULE_selectionSet)
+	p.EnterRule(localctx, 12, ParserRULE_selectionSet)
 	var _la int
 
 	defer func() {
@@ -1058,41 +1263,226 @@ func (p *Parser) SelectionSet() (localctx ISelectionSetContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(51)
+		p.SetState(59)
 		p.Match(ParserLBRACE)
 	}
-	p.SetState(54)
+	p.SetState(61)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == ParserSTRING || _la == ParserIDEN {
-		p.SetState(54)
-		p.GetErrorHandler().Sync(p)
-
-		switch p.GetTokenStream().LA(1) {
-		case ParserIDEN:
-			{
-				p.SetState(52)
-				p.TagDef()
-			}
-
-		case ParserSTRING:
-			{
-				p.SetState(53)
-				p.Match(ParserSTRING)
-			}
-
-		default:
-			panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		{
+			p.SetState(60)
+			p.Selection()
 		}
 
-		p.SetState(56)
+		p.SetState(63)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(58)
+		p.SetState(65)
 		p.Match(ParserRBRACE)
+	}
+
+	return localctx
+}
+
+// ISelectionContext is an interface to support dynamic dispatch.
+type ISelectionContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsSelectionContext differentiates from other interfaces.
+	IsSelectionContext()
+}
+
+type SelectionContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySelectionContext() *SelectionContext {
+	var p = new(SelectionContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ParserRULE_selection
+	return p
+}
+
+func (*SelectionContext) IsSelectionContext() {}
+
+func NewSelectionContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SelectionContext {
+	var p = new(SelectionContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ParserRULE_selection
+
+	return p
+}
+
+func (s *SelectionContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *SelectionContext) CopyFrom(ctx *SelectionContext) {
+	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
+}
+
+func (s *SelectionContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SelectionContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+type SelectTagContext struct {
+	*SelectionContext
+}
+
+func NewSelectTagContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectTagContext {
+	var p = new(SelectTagContext)
+
+	p.SelectionContext = NewEmptySelectionContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*SelectionContext))
+
+	return p
+}
+
+func (s *SelectTagContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SelectTagContext) TagDef() ITagDefContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITagDefContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITagDefContext)
+}
+
+func (s *SelectTagContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.EnterSelectTag(s)
+	}
+}
+
+func (s *SelectTagContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.ExitSelectTag(s)
+	}
+}
+
+func (s *SelectTagContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitSelectTag(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type SelectStringContext struct {
+	*SelectionContext
+}
+
+func NewSelectStringContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectStringContext {
+	var p = new(SelectStringContext)
+
+	p.SelectionContext = NewEmptySelectionContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*SelectionContext))
+
+	return p
+}
+
+func (s *SelectStringContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SelectStringContext) STRING() antlr.TerminalNode {
+	return s.GetToken(ParserSTRING, 0)
+}
+
+func (s *SelectStringContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.EnterSelectString(s)
+	}
+}
+
+func (s *SelectStringContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ParserListener); ok {
+		listenerT.ExitSelectString(s)
+	}
+}
+
+func (s *SelectStringContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitSelectString(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *Parser) Selection() (localctx ISelectionContext) {
+	this := p
+	_ = this
+
+	localctx = NewSelectionContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 14, ParserRULE_selection)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(69)
+	p.GetErrorHandler().Sync(p)
+
+	switch p.GetTokenStream().LA(1) {
+	case ParserSTRING:
+		localctx = NewSelectStringContext(p, localctx)
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(67)
+			p.Match(ParserSTRING)
+		}
+
+	case ParserIDEN:
+		localctx = NewSelectTagContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(68)
+			p.TagDef()
+		}
+
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -1192,12 +1582,22 @@ func (s *TagDefContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *TagDefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitTagDef(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) TagDef() (localctx ITagDefContext) {
 	this := p
 	_ = this
 
 	localctx = NewTagDefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, ParserRULE_tagDef)
+	p.EnterRule(localctx, 16, ParserRULE_tagDef)
 	var _la int
 
 	defer func() {
@@ -1218,27 +1618,27 @@ func (p *Parser) TagDef() (localctx ITagDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(60)
+		p.SetState(71)
 		p.Match(ParserIDEN)
 	}
-	p.SetState(62)
+	p.SetState(73)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == ParserLPAREN {
 		{
-			p.SetState(61)
+			p.SetState(72)
 			p.ArgumentList()
 		}
 
 	}
-	p.SetState(65)
+	p.SetState(76)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == ParserLBRACE {
 		{
-			p.SetState(64)
+			p.SetState(75)
 			p.SelectionSet()
 		}
 
@@ -1384,12 +1784,22 @@ func (s *ArgumentListContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ArgumentListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitArgumentList(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) ArgumentList() (localctx IArgumentListContext) {
 	this := p
 	_ = this
 
 	localctx = NewArgumentListContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, ParserRULE_argumentList)
+	p.EnterRule(localctx, 18, ParserRULE_argumentList)
 	var _la int
 
 	defer func() {
@@ -1410,28 +1820,28 @@ func (p *Parser) ArgumentList() (localctx IArgumentListContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(67)
+		p.SetState(78)
 		p.Match(ParserLPAREN)
 	}
 	{
-		p.SetState(68)
+		p.SetState(79)
 
 		var _x = p.Argument()
 
 		localctx.(*ArgumentListContext)._argument = _x
 	}
 	localctx.(*ArgumentListContext).arguments = append(localctx.(*ArgumentListContext).arguments, localctx.(*ArgumentListContext)._argument)
-	p.SetState(73)
+	p.SetState(84)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == ParserCOMMA {
 		{
-			p.SetState(69)
+			p.SetState(80)
 			p.Match(ParserCOMMA)
 		}
 		{
-			p.SetState(70)
+			p.SetState(81)
 
 			var _x = p.Argument()
 
@@ -1439,12 +1849,12 @@ func (p *Parser) ArgumentList() (localctx IArgumentListContext) {
 		}
 		localctx.(*ArgumentListContext).arguments = append(localctx.(*ArgumentListContext).arguments, localctx.(*ArgumentListContext)._argument)
 
-		p.SetState(75)
+		p.SetState(86)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(76)
+		p.SetState(87)
 		p.Match(ParserRPAREN)
 	}
 
@@ -1458,6 +1868,18 @@ type IArgumentContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetKey returns the key token.
+	GetKey() antlr.Token
+
+	// GetValue returns the value token.
+	GetValue() antlr.Token
+
+	// SetKey sets the key token.
+	SetKey(antlr.Token)
+
+	// SetValue sets the value token.
+	SetValue(antlr.Token)
+
 	// IsArgumentContext differentiates from other interfaces.
 	IsArgumentContext()
 }
@@ -1465,6 +1887,8 @@ type IArgumentContext interface {
 type ArgumentContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	key    antlr.Token
+	value  antlr.Token
 }
 
 func NewEmptyArgumentContext() *ArgumentContext {
@@ -1489,12 +1913,20 @@ func NewArgumentContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 
 func (s *ArgumentContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ArgumentContext) IDEN() antlr.TerminalNode {
-	return s.GetToken(ParserIDEN, 0)
-}
+func (s *ArgumentContext) GetKey() antlr.Token { return s.key }
+
+func (s *ArgumentContext) GetValue() antlr.Token { return s.value }
+
+func (s *ArgumentContext) SetKey(v antlr.Token) { s.key = v }
+
+func (s *ArgumentContext) SetValue(v antlr.Token) { s.value = v }
 
 func (s *ArgumentContext) COLON() antlr.TerminalNode {
 	return s.GetToken(ParserCOLON, 0)
+}
+
+func (s *ArgumentContext) IDEN() antlr.TerminalNode {
+	return s.GetToken(ParserIDEN, 0)
 }
 
 func (s *ArgumentContext) STRING() antlr.TerminalNode {
@@ -1521,12 +1953,22 @@ func (s *ArgumentContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ArgumentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ParserVisitor:
+		return t.VisitArgument(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *Parser) Argument() (localctx IArgumentContext) {
 	this := p
 	_ = this
 
 	localctx = NewArgumentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, ParserRULE_argument)
+	p.EnterRule(localctx, 20, ParserRULE_argument)
 
 	defer func() {
 		p.ExitRule()
@@ -1546,16 +1988,22 @@ func (p *Parser) Argument() (localctx IArgumentContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(78)
-		p.Match(ParserIDEN)
+		p.SetState(89)
+
+		var _m = p.Match(ParserIDEN)
+
+		localctx.(*ArgumentContext).key = _m
 	}
 	{
-		p.SetState(79)
+		p.SetState(90)
 		p.Match(ParserCOLON)
 	}
 	{
-		p.SetState(80)
-		p.Match(ParserSTRING)
+		p.SetState(91)
+
+		var _m = p.Match(ParserSTRING)
+
+		localctx.(*ArgumentContext).value = _m
 	}
 
 	return localctx
