@@ -33,6 +33,12 @@ func (s *BaseParserListener) EnterModuleDef(ctx *ModuleDefContext) {}
 // ExitModuleDef is called when production moduleDef is exited.
 func (s *BaseParserListener) ExitModuleDef(ctx *ModuleDefContext) {}
 
+// EnterImportDef is called when production importDef is entered.
+func (s *BaseParserListener) EnterImportDef(ctx *ImportDefContext) {}
+
+// ExitImportDef is called when production importDef is exited.
+func (s *BaseParserListener) ExitImportDef(ctx *ImportDefContext) {}
+
 // EnterComponentDef is called when production componentDef is entered.
 func (s *BaseParserListener) EnterComponentDef(ctx *ComponentDefContext) {}
 

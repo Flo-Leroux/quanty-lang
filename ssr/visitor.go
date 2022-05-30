@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"quanty/antlr/parser"
+	"quanty/query"
+	"quanty/utils"
 	"strings"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -14,10 +16,34 @@ var logger = log.New(ioutil.Discard, "", log.LstdFlags)
 
 type Visitor struct {
 	parser.BaseParserVisitor
+	program *query.Program
+	module  *query.Module
+	imports []*moduleImport
 }
 
-func NewVisitor() *Visitor {
+func (v *Visitor) GetComponent(name string) *query.Component {
+	for _, mod := range v.program.Modules {
+		for _, iMod := range mod.Imports {
+			if utils.Contains(iMod.Elements, name) {
+				if m := v.program.Modules[iMod.Name]; m != nil {
+					return m.GetComponent(name)
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+type moduleImport struct {
+	module  string
+	imports []string
+}
+
+func NewVisitor(program *query.Program, module *query.Module) *Visitor {
 	v := new(Visitor)
+	v.program = program
+	v.module = module
 	return v
 }
 
@@ -35,6 +61,10 @@ func (q *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 }
 
 func (v *Visitor) VisitFile(ctx *parser.FileContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Visitor) VisitImportDef(ctx *parser.ImportDefContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -106,6 +136,12 @@ func (v *Visitor) VisitSelectTag(ctx *parser.SelectTagContext) string {
 }
 
 func (v *Visitor) VisitTagDef(ctx *parser.TagDefContext) string {
+
+	tagName := ctx.IDEN().GetText()
+
+	if c := v.GetComponent(tagName); c != nil {
+		return v.VisitComponentDef(c.Ctx)
+	}
 
 	var arguments string
 

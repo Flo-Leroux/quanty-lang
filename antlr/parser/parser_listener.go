@@ -14,6 +14,9 @@ type ParserListener interface {
 	// EnterModuleDef is called when entering the moduleDef production.
 	EnterModuleDef(c *ModuleDefContext)
 
+	// EnterImportDef is called when entering the importDef production.
+	EnterImportDef(c *ImportDefContext)
+
 	// EnterComponentDef is called when entering the componentDef production.
 	EnterComponentDef(c *ComponentDefContext)
 
@@ -49,6 +52,9 @@ type ParserListener interface {
 
 	// ExitModuleDef is called when exiting the moduleDef production.
 	ExitModuleDef(c *ModuleDefContext)
+
+	// ExitImportDef is called when exiting the importDef production.
+	ExitImportDef(c *ImportDefContext)
 
 	// ExitComponentDef is called when exiting the componentDef production.
 	ExitComponentDef(c *ComponentDefContext)

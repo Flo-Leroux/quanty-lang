@@ -1,8 +1,6 @@
 package query
 
 import (
-	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"quanty/antlr/parser"
@@ -29,39 +27,31 @@ func (v *Program) VisitFile(ctx *parser.FileContext) interface{} {
 
 	module := v.VisitModuleDef(ctx.ModuleDef().(*parser.ModuleDefContext))
 
+	for _, i := range ctx.AllImportDef() {
+		importDef := v.VisitImportDef(i.(*parser.ImportDefContext))
+		module.AppendImport(importDef)
+	}
+
 	for _, c := range ctx.AllComponentDef() {
 		component := v.VisitComponentDef(c.(*parser.ComponentDefContext))
-		if module.Components[component.Name] != nil {
-			err := errors.New(
-				fmt.Sprintf("Component %s already exist in module %s", component.Name, module.Name),
-			)
-			panic(err)
-		}
-
-		module.Components[component.Name] = component
+		module.AppendComponent(component)
 	}
 
-	if v.Modules[module.Name] == nil {
-		v.Modules[module.Name] = module
-	}
+	v.AppendModule(module)
 
 	return v.VisitChildren(ctx)
 }
 
+func (v *Program) VisitImportDef(ctx *parser.ImportDefContext) *Import {
+	return NewImport(ctx)
+}
+
 func (v *Program) VisitModuleDef(ctx *parser.ModuleDefContext) *Module {
-	return &Module{
-		Name:       ctx.GetName().GetText(),
-		Ctx:        ctx,
-		Components: make(map[string]*Component),
-	} // v.VisitChildren(ctx)
+	return NewModule(ctx)
 }
 
 func (v *Program) VisitComponentDef(ctx *parser.ComponentDefContext) *Component {
-	return &Component{
-		FilePath: v.currentFilePath,
-		Name:     ctx.GetName().GetText(),
-		Ctx:      ctx,
-	}
+	return NewComponent(ctx)
 }
 
 func (v *Program) VisitVariableDefList(ctx *parser.VariableDefListContext) interface{} {

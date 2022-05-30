@@ -4,9 +4,11 @@ options {
     tokenVocab=Lexer;
 }
 
-file : moduleDef componentDef+ | EOF;
+file : moduleDef imports=importDef* componentDef+ | EOF;
 
 moduleDef : MODULE name=IDEN;
+
+importDef : FROM module=IDEN IMPORT imports+=IDEN (COMMA imports+=IDEN)*;
 
 componentDef : COMPONENT name=IDEN variableDefList? selectionSet;
 

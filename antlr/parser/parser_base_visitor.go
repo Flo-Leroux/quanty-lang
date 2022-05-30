@@ -16,6 +16,10 @@ func (v *BaseParserVisitor) VisitModuleDef(ctx *ModuleDefContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseParserVisitor) VisitImportDef(ctx *ImportDefContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseParserVisitor) VisitComponentDef(ctx *ComponentDefContext) interface{} {
 	return v.VisitChildren(ctx)
 }

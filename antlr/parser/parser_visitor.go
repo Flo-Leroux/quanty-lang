@@ -14,6 +14,9 @@ type ParserVisitor interface {
 	// Visit a parse tree produced by Parser#moduleDef.
 	VisitModuleDef(ctx *ModuleDefContext) interface{}
 
+	// Visit a parse tree produced by Parser#importDef.
+	VisitImportDef(ctx *ImportDefContext) interface{}
+
 	// Visit a parse tree produced by Parser#componentDef.
 	VisitComponentDef(ctx *ComponentDefContext) interface{}
 

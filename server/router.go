@@ -25,11 +25,12 @@ func NewRouter(config Config) *http.ServeMux {
 			break
 		}
 		main := module.GetComponent("Main")
+		ssrVisitor := ssr.NewVisitor(query, module)
 
 		router.HandleFunc(route.Path, func(w http.ResponseWriter, r *http.Request) {
 			// fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
 
-			render := ssr.NewVisitor().VisitComponentDef(main.Ctx)
+			render := ssrVisitor.VisitComponentDef(main.Ctx)
 
 			indexTpl.Execute(w, render)
 		})

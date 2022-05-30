@@ -1,30 +1,13 @@
 module Main
 
+from Shared import Navigation, Test
+
 component Main {
-    header(class: "p-0") {
-        nav {
-            ul {
-                li {
-                    a(href: "/") {
-                        "Home"
-                    }
-                    a(href: "/welcome") {
-                        "Welcome"
-                    }
-                }
-            }
-            ul {
-                li {
-                    a(href: "/contact") {
-                        "Contact"
-                    }
-                }
-            }
-        }
-    }
+    Navigation
     main {
         h1 {
             "Home page!"
         }
+        Test
     }
 }
