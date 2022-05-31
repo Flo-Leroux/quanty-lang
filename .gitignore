@@ -6,3 +6,6 @@ vendor
 ./antlr/parser
 ./antlr/.antlr
 .env
+./language/parser/*
+!./language/parser/.gitkeep
+
