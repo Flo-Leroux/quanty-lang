@@ -6,11 +6,11 @@ exportClass = export CLASSPATH=".:/usr/local/lib/antlr-4.10.1-complete.jar:$CLAS
 all: compile
 
 compile: clean
-	cd ./antlr && ${exportClass} && ${antlr4} ./Lexer.g4 -o ./parser -Dlanguage=Go
+	cd ./language/grammar && ${exportClass} && ${antlr4} ./Lexer.g4 -o ../parser -Dlanguage=Go
 # cd ./antlr && ${exportClass} && ${antlr4} ./Parser.g4 -o ./parser -Dlanguage=Go
-	cd ./antlr && ${exportClass} && ${antlr4} ./Parser.g4 -o ./parser -Dlanguage=Go -visitor
-	mv ./antlr/parser/_lexer.go ./antlr/parser/lexer.go
-	mv ./antlr/parser/_parser.go ./antlr/parser/parser.go
+	cd ./language/grammar && ${exportClass} && ${antlr4} ./Parser.g4 -o ../parser -Dlanguage=Go -visitor -no-listener
+	mv ./language/parser/_lexer.go ./language/parser/lexer.go
+	mv ./language/parser/_parser.go ./language/parser/parser.go
 
 
 json:

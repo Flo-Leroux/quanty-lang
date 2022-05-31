@@ -3,7 +3,7 @@ package query
 import (
 	"errors"
 	"fmt"
-	"quanty/antlr/parser"
+	"quanty/language/parser"
 	"sync"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"

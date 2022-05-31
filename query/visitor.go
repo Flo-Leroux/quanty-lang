@@ -3,7 +3,7 @@ package query
 import (
 	"io/ioutil"
 	"log"
-	"quanty/antlr/parser"
+	"quanty/language/parser"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )

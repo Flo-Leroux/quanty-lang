@@ -1,11 +1,11 @@
-./build/*
+build
 !./build/.gitkeep
+
 tmp
 out
 vendor
-./antlr/parser
-./antlr/.antlr
 .env
-./language/parser/*
-!./language/parser/.gitkeep
+.antlr
 
+language/parser/*
+!language/parser/.gitkeep

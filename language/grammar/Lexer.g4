@@ -15,13 +15,21 @@ DQUOTE : '"' .*? '"' -> type(STRING);
 COMMENT : '#' ~[\r\n]* -> channel(HIDDEN);
 
 // BASE
+BANG : '!';
 DOLLAR : '$';
-LBRACE : '{';
-RBRACE : '}';
-LPAREN : '(';
-RPAREN : ')';
-COMMA : ',';
+AMP: '&';
+PAREN_L : '(';
+PAREN_R : ')';
+BRACE_L : '{';
+BRACE_R : '}';
+BRACKET_L: '[';
+BRACKET_R: ']';
+SPREAD: '...';
 COLON : ':';
+EQUALS: '=';
+AT: '@';
+PIPE: '|';
+COMMA : ',';
 DOT : '.';
 
 IDEN : [a-zA-Z][a-zA-Z0-9_]*;

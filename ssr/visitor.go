@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"quanty/antlr/parser"
+	"quanty/language/parser"
 	"quanty/query"
 	"quanty/utils"
 	"strings"
