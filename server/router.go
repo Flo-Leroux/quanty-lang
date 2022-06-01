@@ -1,10 +1,7 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
-	"quanty/query"
-	"quanty/ssr"
 	"text/template"
 )
 
@@ -15,26 +12,24 @@ func NewRouter(config Config) *http.ServeMux {
 	// Create router and define routes and return that router
 	router := http.NewServeMux()
 
-	query := query.Register(config.RootDir)
+	// for _, route := range config.Application.Routes {
 
-	for _, route := range config.Application.Routes {
+	// 	module := query.Modules[route.Module]
+	// 	if module == nil {
+	// 		fmt.Println("module not found")
+	// 		break
+	// 	}
+	// 	main := module.GetComponent("Main")
+	// 	ssrVisitor := ssr.NewVisitor(query, module)
 
-		module := query.Modules[route.Module]
-		if module == nil {
-			fmt.Println("module not found")
-			break
-		}
-		main := module.GetComponent("Main")
-		ssrVisitor := ssr.NewVisitor(query, module)
+	// 	router.HandleFunc(route.Path, func(w http.ResponseWriter, r *http.Request) {
+	// 		// fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
 
-		router.HandleFunc(route.Path, func(w http.ResponseWriter, r *http.Request) {
-			// fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
+	// 		render := ssrVisitor.VisitComponentDef(main.Ctx)
 
-			render := ssrVisitor.VisitComponentDef(main.Ctx)
-
-			indexTpl.Execute(w, render)
-		})
-	}
+	// 		indexTpl.Execute(w, render)
+	// 	})
+	// }
 
 	return router
 }

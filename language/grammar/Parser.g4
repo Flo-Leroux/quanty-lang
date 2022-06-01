@@ -4,14 +4,14 @@ options {
     tokenVocab=Lexer;
 }
 
-document : moduleDef imports+=importDef* definitions+=definition*
+document : moduleDef imports+=importDef* operations+=operationDef*
     | EOF;
 
 moduleDef : MODULE name=IDEN;
 
 importDef : FROM module=IDEN IMPORT imports+=IDEN (COMMA imports+=IDEN)*;
 
-definition :
+operationDef :
     COMPONENT name=IDEN (variableDefList)? selectionSet #componentDef;
 
 variableDefList : PAREN_L variables+=variableDef (COMMA variables+=variableDef)* PAREN_R;
@@ -25,9 +25,9 @@ type : BRACKET_L type BRACKET_R #ListType
 selectionSet : BRACE_L selections+=selection+ BRACE_R;
 
 selection : STRING # selectString
-    | field # selectTag;
+    | field # selectField;
 
-field: alias=IDEN? COMMA name=IDEN argumentList? selectionSet?;
+field: (alias=IDEN COLON)? name=IDEN argumentList? selectionSet?;
 
 argumentList : PAREN_L arguments+=argument (COMMA arguments+=argument)* PAREN_R;
 
