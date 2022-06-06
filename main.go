@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"quanty/language"
 )
 
@@ -24,15 +22,16 @@ import (
 // }
 
 func main() {
-	mainPath := "./app/main.qy"
+	rootPath := "./app"
 
-	file := language.NewFile(mainPath)
+	// tree :=
+	language.NewTree(rootPath)
 
-	jsonRes, err := json.MarshalIndent(file, "", "    ")
-	if err != nil {
-		panic(err)
-	}
+	// jsonRes, err := json.MarshalIndent(tree, "", "    ")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	fmt.Println(string(jsonRes))
-	fmt.Println()
+	// fmt.Println(string(jsonRes))
+	// fmt.Println()
 }

@@ -3,6 +3,9 @@ module Main
 from Shared import Navigation
 
 component Main {
+
+
+    
     main {
         h1 {
             "Home page!"

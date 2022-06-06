@@ -1,13 +1,135 @@
 package language
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
+	"path/filepath"
 	"quanty/language/ast"
 	"quanty/language/parser"
+	"quanty/utils"
+	"strings"
+
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
-var logger = log.New(ioutil.Discard, "", log.LstdFlags)
+func NewFile(path string) *File {
+	file := &File{
+		Path: path,
+	}
+
+	file.Document = file.toDocumentNode()
+
+	return file
+}
+
+type File struct {
+	Path     string
+	Document *ast.DocumentNode
+}
+
+func (file *File) toDocumentNode() *ast.DocumentNode {
+	if _, err := os.Stat(file.Path); err != nil {
+		panic(err)
+	}
+
+	writeFileCache := func(path string, file *File) *ast.DocumentNode {
+
+		doc := FileToDocumentNode(file.Path)
+
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			os.MkdirAll(path, os.ModePerm)
+		}
+
+		astContent, err := json.MarshalIndent(doc, "", "  ")
+		if err != nil {
+			return doc
+		}
+
+		astPath := filepath.Join(path, "qy.ast")
+		astFile, err := os.Create(astPath)
+		if err != nil {
+			fmt.Println(err)
+			return doc
+		}
+		defer astFile.Close()
+		astFile.Write(astContent)
+
+		sourceContent, err := ioutil.ReadFile(file.Path)
+		if err != nil {
+			return doc
+		}
+
+		sourcePath := filepath.Join(path, "qy.source")
+		sourceFile, err := os.Create(sourcePath)
+		if err != nil {
+			return doc
+		}
+		defer sourceFile.Close()
+		sourceFile.Write(sourceContent)
+
+		return doc
+	}
+
+	tmpRootDir := "./app/tmp"
+	tmpDir := filepath.Join(tmpRootDir, strings.TrimSuffix(file.Path, ".qy"))
+	tmpFilePath := filepath.Join(tmpDir, "qy.source")
+
+	fileHashed := utils.HashFileContent(file.Path)
+	tmpFileExist := false
+
+	if _, err := os.Stat(tmpFilePath); err == nil {
+		tmpFileExist = true
+	}
+
+	if !tmpFileExist {
+		fmt.Printf("Temp File doesn't exist for %s => Create it if possible\n", file.Path)
+		return writeFileCache(tmpDir, file)
+	}
+
+	tmpFileHashed := utils.HashFileContent(tmpFilePath)
+
+	if tmpFileHashed != fileHashed {
+		fmt.Printf("Temp File doesn't correspond for %s => Update it if possible\n", file.Path)
+		return writeFileCache(tmpDir, file)
+	}
+
+	tmpAstPath := filepath.Join(tmpRootDir, tmpDir, "qy.ast")
+	content, err := ioutil.ReadFile(tmpAstPath)
+	if err != nil {
+		fmt.Printf("Cannot read temp File for %s => temp file is ignore\n", file.Path)
+		return writeFileCache(tmpDir, file)
+	}
+
+	doc := ast.DocumentNode{}
+	err = json.Unmarshal(content, &doc)
+	if err != nil {
+		fmt.Printf("Cannot parse temp File for %s => temp file is ignore\n", file.Path)
+		return writeFileCache(tmpDir, file)
+	}
+
+	return &doc
+}
+
+func FileToDocumentNode(filePath string) *ast.DocumentNode {
+	p := newParser(filePath)
+	document := p.Document().(*parser.DocumentContext)
+	visitor := &visitor{}
+
+	return visitor.VisitDocument(document)
+}
+
+func newParser(filePath string) *parser.Parser {
+	input, _ := antlr.NewFileStream(filePath)
+	lexer := parser.NewLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := parser.NewParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	p.BuildParseTrees = true
+
+	return p
+}
 
 type visitor struct {
 	*parser.BaseParserVisitor
@@ -68,25 +190,25 @@ func (v *visitor) VisitComponentDef(ctx *parser.ComponentDefContext) *ast.Operat
 	return def
 }
 
-func (v *visitor) VisitVariableDefList(ctx *parser.VariableDefListContext) interface{} {
-	return v.VisitChildren(ctx)
-}
+// func (v *visitor) VisitVariableDefList(ctx *parser.VariableDefListContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }
 
-func (v *visitor) VisitVariableDef(ctx *parser.VariableDefContext) interface{} {
-	return v.VisitChildren(ctx)
-}
+// func (v *visitor) VisitVariableDef(ctx *parser.VariableDefContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }
 
-func (v *visitor) VisitNamedType(ctx *parser.NamedTypeContext) interface{} {
-	return v.VisitChildren(ctx)
-}
+// func (v *visitor) VisitNamedType(ctx *parser.NamedTypeContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }
 
-func (v *visitor) VisitNonNullType(ctx *parser.NonNullTypeContext) interface{} {
-	return v.VisitChildren(ctx)
-}
+// func (v *visitor) VisitNonNullType(ctx *parser.NonNullTypeContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }
 
-func (v *visitor) VisitListType(ctx *parser.ListTypeContext) interface{} {
-	return v.VisitChildren(ctx)
-}
+// func (v *visitor) VisitListType(ctx *parser.ListTypeContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }
 
 func (v *visitor) VisitSelectionSet(ctx *parser.SelectionSetContext) *ast.SelectionSetNode {
 	def := &ast.SelectionSetNode{
