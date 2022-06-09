@@ -3,8 +3,7 @@ module Main
 component Main {
     main {
         h1 {
-            "Home page!"
+            "example - Home page!"
         }
-        Test
     }
 }

@@ -1,6 +1,7 @@
 package init
 
 import (
+	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -29,24 +30,30 @@ const GITIGNORE_TPL = `
 func Register() *cli.Command {
 	return &cli.Command{
 		Name:  "init",
-		Usage: "generate new Quanty application",
+		Usage: "generate new Quanty application named `NAME`",
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:     "name",
-				Usage:    "Name of application",
-				Required: true,
+			&cli.BoolFlag{
+				Name:  "no-git",
+				Usage: "No initialize application without git",
+				Value: false,
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			name := ctx.String("name")
+			name := ctx.Args().First()
+			if name == "" {
+				return errors.New("name not set")
+			}
 
 			dirName := createDir(name)
 			accessToDir(dirName)
 
 			createMainFile(name)
-			createGitignore()
 
-			initGit()
+			noGit := ctx.Bool("no-git")
+			if !noGit {
+				createGitignore()
+				initGit()
+			}
 
 			return nil
 		},

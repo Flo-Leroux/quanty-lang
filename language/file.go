@@ -2,7 +2,6 @@ package language
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -30,6 +29,7 @@ type File struct {
 }
 
 func (file *File) toDocumentNode() *ast.DocumentNode {
+
 	if _, err := os.Stat(file.Path); err != nil {
 		panic(err)
 	}
@@ -50,7 +50,6 @@ func (file *File) toDocumentNode() *ast.DocumentNode {
 		astPath := filepath.Join(path, "qy.ast")
 		astFile, err := os.Create(astPath)
 		if err != nil {
-			fmt.Println(err)
 			return doc
 		}
 		defer astFile.Close()
@@ -72,7 +71,7 @@ func (file *File) toDocumentNode() *ast.DocumentNode {
 		return doc
 	}
 
-	tmpRootDir := "./app/tmp"
+	tmpRootDir := ".quanty"
 	tmpDir := filepath.Join(tmpRootDir, strings.TrimSuffix(file.Path, ".qy"))
 	tmpFilePath := filepath.Join(tmpDir, "qy.source")
 
@@ -84,28 +83,28 @@ func (file *File) toDocumentNode() *ast.DocumentNode {
 	}
 
 	if !tmpFileExist {
-		fmt.Printf("Temp File doesn't exist for %s => Create it if possible\n", file.Path)
+		// fmt.Printf("Temp File doesn't exist for %s => Create it if possible\n", file.Path)
 		return writeFileCache(tmpDir, file)
 	}
 
 	tmpFileHashed := utils.HashFileContent(tmpFilePath)
 
 	if tmpFileHashed != fileHashed {
-		fmt.Printf("Temp File doesn't correspond for %s => Update it if possible\n", file.Path)
+		// fmt.Printf("Temp File doesn't correspond for %s => Update it if possible\n", file.Path)
 		return writeFileCache(tmpDir, file)
 	}
 
 	tmpAstPath := filepath.Join(tmpRootDir, tmpDir, "qy.ast")
 	content, err := ioutil.ReadFile(tmpAstPath)
 	if err != nil {
-		fmt.Printf("Cannot read temp File for %s => temp file is ignore\n", file.Path)
+		// fmt.Printf("Cannot read temp File for %s => temp file is ignore\n", file.Path)
 		return writeFileCache(tmpDir, file)
 	}
 
 	doc := ast.DocumentNode{}
 	err = json.Unmarshal(content, &doc)
 	if err != nil {
-		fmt.Printf("Cannot parse temp File for %s => temp file is ignore\n", file.Path)
+		// fmt.Printf("Cannot parse temp File for %s => temp file is ignore\n", file.Path)
 		return writeFileCache(tmpDir, file)
 	}
 

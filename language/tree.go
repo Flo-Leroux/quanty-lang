@@ -1,7 +1,7 @@
 package language
 
 import (
-	"log"
+	"path/filepath"
 	"quanty/utils"
 	"sync"
 )
@@ -26,16 +26,20 @@ func (t *tree) walkInRoot() {
 	filesPath := utils.FindFiles(t.Root, ".qy")
 
 	for _, filePath := range filesPath {
+		relFilePath, err := filepath.Rel(t.Root, filePath)
+		if err != nil {
+			panic(err)
+		}
+
 		wg.Add(1)
 
 		go func(filePath string) {
 			defer wg.Done()
 			file := NewFile(filePath)
-			log.Println(filePath, file != nil)
 			if file != nil {
 				t.Files = append(t.Files, file)
 			}
-		}(filePath)
+		}(relFilePath)
 	}
 
 	wg.Wait()
