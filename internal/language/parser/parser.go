@@ -115,6 +115,22 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 }
 
+func (p *Parser) parseWrapByTokens(enter, exit token.Type, fn func()) {
+	if !p.expectAndNext(enter) {
+		return
+	}
+
+	for !p.currentTokenIs(exit) {
+		fn()
+		p.next()
+
+		if p.currentTokenIs(token.EOF) {
+			p.peekError(exit)
+			return
+		}
+	}
+}
+
 // parseComponentStatement returns a COMPONENT Statement AST Node
 func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	stmt := &ast.ComponentStatement{Token: p.currentToken, Fields: []*ast.Field{}}
@@ -123,23 +139,32 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	}
 	stmt.Name = p.currentToken
 
-	if !p.expectAndNext(token.LBRACE) {
-		return nil
-	}
+	// if !p.expectAndNext(token.LBRACE) {
+	// 	return nil
+	// }
 
-	for !p.currentTokenIs(token.RBRACE) {
-		switch p.currentToken.Type {
-		case token.IDENT:
-			stmt.Fields = append(stmt.Fields, p.parseField())
-			// // 	stmt.RelationStatements = append(stmt.RelationStatements, p.parseRelationStatement())
-			// // case token.ACTION:
-			// // 	stmt.ActionStatements = append(stmt.ActionStatements, p.parseActionStatement())
-			// // 	break
-			// default:
-			// 	break
-		}
-		p.next()
-	}
+	// for !p.currentTokenIs(token.RBRACE) {
+	// 	switch p.currentToken.Type {
+	// 	case token.IDENT:
+	// 		stmt.Fields = append(stmt.Fields, p.parseField())
+	// 	}
+	// 	p.next()
+
+	// 	if p.currentTokenIs(token.EOF) {
+	// 		p.peekError(token.RBRACE)
+	// 		return nil
+	// 	}
+	// }
+
+	p.parseWrapByTokens(
+		token.LBRACE, token.RBRACE,
+		func() {
+			switch p.currentToken.Type {
+			case token.IDENT:
+				stmt.Fields = append(stmt.Fields, p.parseField())
+			}
+		},
+	)
 
 	// if p.peekTokenIs(token.OPTION) {
 	// 	p.next()
@@ -156,21 +181,15 @@ func (p *Parser) parseField() *ast.Field {
 	}
 
 	if p.peekTokenIs(token.LBRACE) {
-		p.next()
-
-		for !p.currentTokenIs(token.RBRACE) {
-			switch p.currentToken.Type {
-			case token.IDENT:
-				f.Selections = append(f.Selections, p.parseField())
-				// // 	stmt.RelationStatements = append(stmt.RelationStatements, p.parseRelationStatement())
-				// // case token.ACTION:
-				// // 	stmt.ActionStatements = append(stmt.ActionStatements, p.parseActionStatement())
-				// // 	break
-				// default:
-				// 	break
-			}
-			p.next()
-		}
+		p.parseWrapByTokens(
+			token.LBRACE, token.RBRACE,
+			func() {
+				switch p.currentToken.Type {
+				case token.IDENT:
+					f.Selections = append(f.Selections, p.parseField())
+				}
+			},
+		)
 	}
 
 	return f
