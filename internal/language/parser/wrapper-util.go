@@ -58,3 +58,20 @@ func (w Wrapper) findOpenWithClose(t token.Type) token.Type {
 var wrappers = &Wrapper{
 	BRACE_WRAPPER,
 }
+
+// wrapWith -
+func (p *Parser) wrapWith(wrapper Wrap, fn func()) {
+	if !p.expectAndNext(wrapper.Open) {
+		return
+	}
+
+	for !p.currentTokenIs(wrapper.Close) {
+		fn()
+		p.next()
+
+		if p.currentTokenIs(token.EOF) {
+			p.peekError(wrapper.Close)
+			return
+		}
+	}
+}

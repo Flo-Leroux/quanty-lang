@@ -1,9 +1,6 @@
 package parser
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/lexer"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/token"
@@ -62,7 +59,11 @@ func NewParser(str string) (p *Parser) {
 func (p *Parser) next() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.l.NextToken()
+	p.checkStackWrappers()
+}
 
+// checkStackWrappers -
+func (p *Parser) checkStackWrappers() {
 	if wrappers.isOpen(p.currentToken) {
 		p.stackWrapper = append(p.stackWrapper, p.currentToken.Type)
 	}
@@ -81,7 +82,6 @@ func (p *Parser) next() {
 			p.stackWrapper = p.stackWrapper[:len(p.stackWrapper)-1]
 		}
 	}
-
 }
 
 // currentTokenIs -
@@ -130,146 +130,6 @@ func (p *Parser) Parse() *ast.Schema {
 	return schema
 }
 
-// parseStatement method based on defined token types
-func (p *Parser) parseStatement() ast.Statement {
-	switch p.currentToken.Type {
-	case token.COMPONENT:
-		return p.parseComponentStatement()
-	default:
-		return nil
-	}
-}
-
-func (p *Parser) wrapWith(wrapper Wrap, fn func()) {
-	if !p.expectAndNext(wrapper.Open) {
-		return
-	}
-
-	for !p.currentTokenIs(wrapper.Close) {
-		fn()
-		p.next()
-
-		if p.currentTokenIs(token.EOF) {
-			p.peekError(wrapper.Close)
-			return
-		}
-	}
-}
-
-// parseComponentStatement returns a COMPONENT Statement AST Node
-func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
-	stmt := &ast.ComponentStatement{Token: p.currentToken, Fields: []*ast.Field{}}
-	if !p.expectAndNext(token.IDENT) {
-		return nil
-	}
-	stmt.Name = p.currentToken
-
-	p.wrapWith(
-		BRACE_WRAPPER,
-		func() {
-			switch p.currentToken.Type {
-			case token.IDENT:
-				stmt.Fields = append(stmt.Fields, p.parseField())
-			}
-		},
-	)
-
-	// if p.peekTokenIs(token.OPTION) {
-	// 	p.next()
-	// 	stmt.Option = p.currentToken
-	// }
-
-	return stmt
-}
-
-func (p *Parser) parseField() *ast.Field {
-	f := &ast.Field{
-		Name:       p.currentToken,
-		Selections: []*ast.Field{},
-	}
-
-	if p.peekTokenIs(token.LBRACE) {
-		p.wrapWith(
-			BRACE_WRAPPER,
-			func() {
-				switch p.currentToken.Type {
-				case token.IDENT:
-					f.Selections = append(f.Selections, p.parseField())
-				}
-			},
-		)
-	}
-
-	return f
-}
-
-// // parseRelationStatement -
-// func (p *Parser) parseRelationStatement() *ast.RelationStatement {
-// 	stmt := &ast.RelationStatement{Token: p.currentToken}
-// 	if !p.expectAndNext(token.IDENT) {
-// 		return nil
-// 	}
-// 	stmt.Name = p.currentToken
-
-// 	//&& !p.currentTokenIs(token.RELATION)
-// 	for p.peekTokenIs(token.SIGN) && !p.peekTokenIs(token.OPTION) {
-// 		stmt.RelationTypes = append(stmt.RelationTypes, p.parseRelationTypeStatement())
-// 	}
-
-// 	if p.peekTokenIs(token.OPTION) {
-// 		p.next()
-// 		stmt.Option = p.currentToken
-// 	}
-
-// 	return stmt
-// }
-
-// // parseRelationTypeStatement -
-// func (p *Parser) parseRelationTypeStatement() *ast.RelationTypeStatement {
-// 	if !p.expectAndNext(token.SIGN) {
-// 		return nil
-// 	}
-// 	stmt := &ast.RelationTypeStatement{Sign: p.currentToken}
-// 	if !p.expectAndNext(token.IDENT) {
-// 		return nil
-// 	}
-// 	stmt.Token = p.currentToken
-// 	return stmt
-// }
-
-// // parseActionStatement -
-// func (p *Parser) parseActionStatement() ast.Statement {
-// 	stmt := &ast.ActionStatement{Token: p.currentToken}
-
-// 	if !p.expectAndNext(token.IDENT) {
-// 		return nil
-// 	}
-
-// 	stmt.Name = p.currentToken
-
-// 	if !p.expectAndNext(token.ASSIGN) {
-// 		return nil
-// 	}
-
-// 	p.next()
-
-// 	stmt.ExpressionStatement = p.parseExpressionStatement()
-
-// 	return stmt
-// }
-
-// // parseExpressionStatement -
-// func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
-// 	stmt := &ast.ExpressionStatement{}
-// 	stmt.Expression = p.parseExpression(LOWEST)
-
-// 	if p.currentTokenIs(token.NEWLINE) {
-// 		p.next()
-// 	}
-
-// 	return stmt
-// }
-
 // expectAndNext -
 func (p *Parser) expectAndNext(t token.Type) bool {
 	if p.peekTokenIs(t) {
@@ -280,97 +140,6 @@ func (p *Parser) expectAndNext(t token.Type) bool {
 	return false
 }
 
-// // parseExpression -
-// func (p *Parser) parseExpression(precedence int) ast.Expression {
-// 	if p.currentTokenIs(token.LPAREN) {
-// 		p.next()
-// 		return p.parseInnerParen()
-// 	}
-
-// 	prefix := p.prefixParseFns[p.currentToken.Type]
-// 	if prefix == nil {
-// 		p.noPrefixParseFnError(p.currentToken.Type)
-// 		return nil
-// 	}
-// 	left := prefix()
-
-// 	for !p.peekTokenIs(token.NEWLINE) && precedence < p.peekPrecedence() {
-// 		infix := p.infixParseFunc[p.peekToken.Type]
-// 		if infix == nil {
-// 			return left
-// 		}
-// 		p.next()
-// 		left = infix(left)
-// 	}
-
-// 	return left
-// }
-
-// // parseInnerParen -
-// func (p *Parser) parseInnerParen() ast.Expression {
-// 	if p.currentTokenIs(token.LPAREN) {
-// 		return p.parseExpression(LOWEST)
-// 	}
-
-// 	prefix := p.prefixParseFns[p.currentToken.Type]
-// 	if prefix == nil {
-// 		p.noPrefixParseFnError(p.currentToken.Type)
-// 		return nil
-// 	}
-// 	left := prefix()
-
-// 	for !p.currentTokenIs(token.RPAREN) {
-// 		infix := p.infixParseFunc[p.peekToken.Type]
-// 		if infix == nil {
-// 			return left
-// 		}
-// 		p.next()
-// 		left = infix(left)
-// 	}
-
-// 	return left
-// }
-
-// // parsePrefixExpression -
-// func (p *Parser) parsePrefixExpression() ast.Expression {
-// 	expression := &ast.PrefixExpression{
-// 		Token:    p.currentToken,
-// 		Operator: p.currentToken.Literal,
-// 	}
-// 	p.next()
-// 	expression.Value = p.currentToken.Literal
-// 	return expression
-// }
-
-// // parseInfixExpression
-// func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
-// 	expression := &ast.InfixExpression{
-// 		Token:    p.currentToken, // and, or
-// 		Left:     left,
-// 		Operator: p.currentToken.Literal,
-// 	}
-// 	precedence := p.currentPrecedence()
-// 	p.next()
-// 	expression.Right = p.parseExpression(precedence)
-// 	return expression
-// }
-
-// // peekPrecedence -
-// func (p *Parser) peekPrecedence() int {
-// 	if p, ok := precedences[p.peekToken.Type]; ok {
-// 		return p
-// 	}
-// 	return LOWEST
-// }
-
-// // peekPrecedence -
-// func (p *Parser) currentPrecedence() int {
-// 	if p, ok := precedences[p.currentToken.Type]; ok {
-// 		return p
-// 	}
-// 	return LOWEST
-// }
-
 // parseIdentifier
 func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
@@ -379,29 +148,4 @@ func (p *Parser) parseIdentifier() ast.Expression {
 // registerPrefix
 func (p *Parser) registerPrefix(tokenType token.Type, fn prefixParseFn) {
 	p.prefixParseFns[tokenType] = fn
-}
-
-// // registerInfix
-// func (p *Parser) registerInfix(tokenType token.Type, fn infixParseFn) {
-// 	p.infixParseFunc[tokenType] = fn
-// }
-
-// // noPrefixParseFnError -
-// func (p *Parser) noPrefixParseFnError(t token.Type) {
-// 	msg := fmt.Sprintf("no prefix parse function for %s found", t)
-// 	p.errors = append(p.errors, msg)
-// }
-
-// peekError -
-func (p *Parser) peekError(t token.Type) {
-	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
-	err := errors.New(msg)
-	p.errors = append(p.errors, err)
-}
-
-// peekError -
-func (p *Parser) peekUnexpectedClosing(t token.Type) {
-	msg := fmt.Sprintf("unexpected closing token %s", t)
-	err := errors.New(msg)
-	p.errors = append(p.errors, err)
 }
