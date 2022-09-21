@@ -22,11 +22,6 @@ func New(typ Type, ch byte) Token {
 // keywords -
 var keywords = map[string]Type{
 	"component": COMPONENT,
-	// "relation": RELATION,
-	// "action":   ACTION,
-	// "and":      AND,
-	// "or":       OR,
-	// "not":      NOT,
 }
 
 const (
@@ -57,8 +52,6 @@ const (
 	LPAREN = "LPAREN"
 	RPAREN = "RPAREN"
 
-	// ASSIGN = "ASSIGN"
-	// SIGN   = "SIGN"
 	DOT = "DOT"
 
 	COLON = "COLON"
@@ -70,24 +63,14 @@ const (
 	//
 
 	COMPONENT = "COMPONENT"
-	// RELATION = "RELATION"
-	// ACTION   = "ACTION"
 
 	//
 	// Prefix
 	//
 
-	// NOT = "NOT"
-
 	//
 	// Logical
 	//
-
-	// AND = "AND"
-	// OR  = "OR"
-
-	// QUOTE  = "QUOTE"
-	// OPTION = "OPTION"
 )
 
 // LookupKeywords -

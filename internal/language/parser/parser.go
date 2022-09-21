@@ -30,6 +30,7 @@ type Parser struct {
 	errors         []error
 	prefixParseFns map[token.Type]prefixParseFn
 	infixParseFunc map[token.Type]infixParseFn
+	stackWrapper   []token.Type
 }
 
 type (
@@ -61,6 +62,26 @@ func NewParser(str string) (p *Parser) {
 func (p *Parser) next() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.l.NextToken()
+
+	if wrappers.isOpen(p.currentToken) {
+		p.stackWrapper = append(p.stackWrapper, p.currentToken.Type)
+	}
+
+	if wrappers.isClose(p.currentToken) {
+		if len(p.stackWrapper) == 0 {
+			p.peekUnexpectedClosing(p.currentToken.Type)
+		} else {
+			last := p.stackWrapper[len(p.stackWrapper)-1:][0]
+
+			expected := wrappers.findOpenWithClose(p.currentToken.Type)
+			if last != expected {
+				p.peekUnexpectedClosing(p.currentToken.Type)
+			}
+
+			p.stackWrapper = p.stackWrapper[:len(p.stackWrapper)-1]
+		}
+	}
+
 }
 
 // currentTokenIs -
@@ -102,6 +123,10 @@ func (p *Parser) Parse() *ast.Schema {
 		p.next()
 	}
 
+	if len(p.stackWrapper) != 0 {
+		// p.peekWrapperErrors()
+	}
+
 	return schema
 }
 
@@ -115,17 +140,17 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 }
 
-func (p *Parser) parseWrapByTokens(enter, exit token.Type, fn func()) {
-	if !p.expectAndNext(enter) {
+func (p *Parser) wrapWith(wrapper Wrap, fn func()) {
+	if !p.expectAndNext(wrapper.Open) {
 		return
 	}
 
-	for !p.currentTokenIs(exit) {
+	for !p.currentTokenIs(wrapper.Close) {
 		fn()
 		p.next()
 
 		if p.currentTokenIs(token.EOF) {
-			p.peekError(exit)
+			p.peekError(wrapper.Close)
 			return
 		}
 	}
@@ -139,25 +164,8 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	}
 	stmt.Name = p.currentToken
 
-	// if !p.expectAndNext(token.LBRACE) {
-	// 	return nil
-	// }
-
-	// for !p.currentTokenIs(token.RBRACE) {
-	// 	switch p.currentToken.Type {
-	// 	case token.IDENT:
-	// 		stmt.Fields = append(stmt.Fields, p.parseField())
-	// 	}
-	// 	p.next()
-
-	// 	if p.currentTokenIs(token.EOF) {
-	// 		p.peekError(token.RBRACE)
-	// 		return nil
-	// 	}
-	// }
-
-	p.parseWrapByTokens(
-		token.LBRACE, token.RBRACE,
+	p.wrapWith(
+		BRACE_WRAPPER,
 		func() {
 			switch p.currentToken.Type {
 			case token.IDENT:
@@ -181,8 +189,8 @@ func (p *Parser) parseField() *ast.Field {
 	}
 
 	if p.peekTokenIs(token.LBRACE) {
-		p.parseWrapByTokens(
-			token.LBRACE, token.RBRACE,
+		p.wrapWith(
+			BRACE_WRAPPER,
 			func() {
 				switch p.currentToken.Type {
 				case token.IDENT:
@@ -387,6 +395,13 @@ func (p *Parser) registerPrefix(tokenType token.Type, fn prefixParseFn) {
 // peekError -
 func (p *Parser) peekError(t token.Type) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	err := errors.New(msg)
+	p.errors = append(p.errors, err)
+}
+
+// peekError -
+func (p *Parser) peekUnexpectedClosing(t token.Type) {
+	msg := fmt.Sprintf("unexpected closing token %s", t)
 	err := errors.New(msg)
 	p.errors = append(p.errors, err)
 }
