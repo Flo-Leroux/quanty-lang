@@ -81,18 +81,18 @@ func (l *Lexer) NextToken() (tok token.Token) {
 		}
 	}
 	l.readChar()
-	return
+	return tok
 }
 
 // lexBacktick -
-func (l *Lexer) lexBacktick() (lit string) {
-	l.readChar()
-	position := l.position
-	for !isBacktick(l.ch) {
-		l.readChar()
-	}
-	return l.input[position:l.position]
-}
+// func (l *Lexer) lexBacktick() (lit string) {
+// 	l.readChar()
+// 	position := l.position
+// 	for !isBacktick(l.ch) {
+// 		l.readChar()
+// 	}
+// 	return l.input[position:l.position]
+// }
 
 // lexIdent -
 func (l *Lexer) lexIdent() string {
@@ -118,9 +118,9 @@ func (l *Lexer) skipUntilNewline() {
 }
 
 // isBacktick -
-func isBacktick(r byte) bool {
-	return r == '`'
-}
+// func isBacktick(r byte) bool {
+// 	return r == '`'
+// }
 
 // isSpace -
 func isSpace(r byte) bool {

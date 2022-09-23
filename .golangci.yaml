@@ -3,6 +3,7 @@ run:
   timeout: 5m
   go: "1.18"
 
+
 linters:
   disable:
     - containedctx
@@ -26,3 +27,9 @@ linters:
     - unused
     - unparam
     - misspell
+
+linters-settings:
+  stylecheck:
+    checks:
+      - all
+      - '-ST1016' # disable the rule ST1016

@@ -8,7 +8,7 @@ type Wrap struct {
 	Close token.Type
 }
 
-var BRACE_WRAPPER = Wrap{
+var BraceWrapper = Wrap{
 	Open:  token.LBRACE,
 	Close: token.RBRACE,
 }
@@ -35,15 +35,15 @@ func (w Wrapper) isClose(t token.Token) bool {
 	return false
 }
 
-func (w Wrapper) findCloseWithOpen(t token.Type) token.Type {
-	for _, wrap := range w {
-		if wrap.Open == t {
-			return wrap.Close
-		}
-	}
+// func (w Wrapper) findCloseWithOpen(t token.Type) token.Type {
+// 	for _, wrap := range w {
+// 		if wrap.Open == t {
+// 			return wrap.Close
+// 		}
+// 	}
 
-	return token.ILLEGAL
-}
+// 	return token.ILLEGAL
+// }
 
 func (w Wrapper) findOpenWithClose(t token.Type) token.Type {
 	for _, wrap := range w {
@@ -56,7 +56,7 @@ func (w Wrapper) findOpenWithClose(t token.Type) token.Type {
 }
 
 var wrappers = &Wrapper{
-	BRACE_WRAPPER,
+	BraceWrapper,
 }
 
 // wrapWith -

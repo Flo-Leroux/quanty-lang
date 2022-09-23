@@ -123,9 +123,9 @@ func (p *Parser) Parse() *ast.Schema {
 		p.next()
 	}
 
-	if len(p.stackWrapper) != 0 {
-		// p.peekWrapperErrors()
-	}
+	// if len(p.stackWrapper) != 0 {
+	// 	p.peekWrapperErrors()
+	// }
 
 	return schema
 }

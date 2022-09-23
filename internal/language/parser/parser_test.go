@@ -14,10 +14,10 @@ func BenchmarkParser(b *testing.B) {
 component Main {
 	div {
 		span
-		p 
+		p
 		div {
 			span
-			p 
+			p
 			div {
 				span
 				p

@@ -31,4 +31,3 @@ test:
 ci.lint:
 	@echo "== 🙆 ci.linter =="
 	golangci-lint run -v ./... --fix
-

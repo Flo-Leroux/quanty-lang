@@ -13,7 +13,7 @@ func (p *Parser) parseField() *ast.Field {
 
 	if p.peekTokenIs(token.LBRACE) {
 		p.wrapWith(
-			BRACE_WRAPPER,
+			BraceWrapper,
 			func() {
 				switch p.currentToken.Type {
 				case token.IDENT:

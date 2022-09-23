@@ -14,7 +14,7 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	stmt.Name = p.currentToken
 
 	p.wrapWith(
-		BRACE_WRAPPER,
+		BraceWrapper,
 		func() {
 			switch p.currentToken.Type {
 			case token.IDENT:
