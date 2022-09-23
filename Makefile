@@ -1,10 +1,15 @@
 init:
 	@echo "== 👩‍🌾 init =="
-	sudo snap install pre-commit --classic
+	@echo "== 👩‍🌾 golangci-lint =="
+# https://golangci-lint.run/
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0
 
 	@echo "== pre-commit setup =="
+	pip install pre-commit
 	pre-commit install
+
+	@echo "== goreleaser setup =="
+	go install github.com/goreleaser/goreleaser@latest
 
 	@echo "== install ginkgo =="
 # go install -mod=mod github.com/onsi/ginkgo/v2/ginkgo
