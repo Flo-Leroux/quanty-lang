@@ -5,7 +5,12 @@ import (
 	"os/user"
 )
 
-var version = "0.0.0"
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
+)
 
 func main() {
 	user, err := user.Current()
@@ -16,7 +21,9 @@ func main() {
 Hello %s!
 This is the Quanty Query Language!
 
-Version: %s`,
-		user.Username, version)
+Version: %s
+Commit: %s
+Built at %s by %s`,
+		user.Username, version, commit, date, builtBy)
 	fmt.Println()
 }

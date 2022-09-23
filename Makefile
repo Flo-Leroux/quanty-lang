@@ -18,6 +18,10 @@ init:
 	@echo "== install gomock =="
 # go install github.com/golang/mock/mockgen@v1.6.0
 
+build.snapshot:
+	@echo "== 👩‍🌾 Build snapshot =="
+	goreleaser release --snapshot --rm-dist
+
 precommit.rehooks:
 	pre-commit autoupdate
 	pre-commit install --install-hooks
@@ -25,6 +29,7 @@ precommit.rehooks:
 
 test.ci:
 	@echo "== 🦸‍️ ci.tester =="
+	go test ./...
 
 test.ui:
 	@echo "== 🦸‍️ ui.tester =="
@@ -32,7 +37,12 @@ test.ui:
 
 test:
 	@echo "== 🦸‍️ tester =="
+	go test ./...
 
-ci.lint:
-	@echo "== 🙆 ci.linter =="
+lint.ci:
+	@echo "== 🙆 linter.ci =="
 	golangci-lint run -v ./... --fix
+
+lint:
+	@echo "== 🙆 linter =="
+	golangci-lint run --fix

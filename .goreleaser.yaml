@@ -8,11 +8,15 @@ before:
     - go mod tidy
     # you may remove this if you don't need go generate
     # - go generate ./...
-    - golangci-lint run
+    - make test
+    - make lint
 
 builds:
   - env:
       - CGO_ENABLED=0
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.CommitDate}} -X main.builtBy=Flo-Leroux
     goos:
       - linux
       - windows
