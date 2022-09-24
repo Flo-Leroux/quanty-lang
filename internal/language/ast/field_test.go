@@ -21,7 +21,7 @@ func TestField(t *testing.T) {
 			name: "When selection is empty",
 			input: &ast.Field{
 				Name:       token.Token{Type: token.IDENT, Literal: "div"},
-				Selections: []*ast.Field{},
+				Selections: ast.SelectionList{},
 			},
 			result: "div",
 		},
@@ -32,14 +32,14 @@ func TestField(t *testing.T) {
 					Type:    token.IDENT,
 					Literal: "div",
 				},
-				Selections: []*ast.Field{
-					{
+				Selections: ast.SelectionList{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "p"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
-					{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "img"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
 				},
 			},
@@ -52,26 +52,58 @@ func TestField(t *testing.T) {
 					Type:    token.IDENT,
 					Literal: "div",
 				},
-				Selections: []*ast.Field{
-					{
+				Selections: ast.SelectionList{
+					&ast.Field{
 						Name: token.Token{
 							Type:    token.IDENT,
 							Literal: "p",
 						},
-						Selections: []*ast.Field{
-							{
+						Selections: ast.SelectionList{
+							&ast.Field{
 								Name:       token.Token{Type: token.IDENT, Literal: "span"},
-								Selections: []*ast.Field{},
+								Selections: ast.SelectionList{},
 							},
 						},
 					},
-					{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "img"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
 				},
 			},
 			result: "div { p { span } img }",
+		},
+	}
+
+	Convey("Subject: Stringify", t, func() {
+
+		for _, test := range tests {
+			Convey(test.name, func() {
+				So(test.input.String(), ShouldEqual, test.result)
+			})
+		}
+	})
+}
+
+// TestStringValue -
+func TestStringValue(t *testing.T) {
+	type test struct {
+		name   string
+		input  *ast.StringValue
+		result string
+	}
+
+	tests := []test{
+		{
+			name: "When selection is empty",
+			input: &ast.StringValue{
+				Token: token.Token{
+					Type:    token.STRING,
+					Literal: "Hello World!",
+				},
+				Value: "Hello World!",
+			},
+			result: "Hello World!",
 		},
 	}
 

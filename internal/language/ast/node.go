@@ -16,11 +16,15 @@ type Expression interface {
 	Type() string
 }
 
+type ExpressionList = []Expression
+
 // Statement -
 type Statement interface {
 	Node
 	statementNode()
 }
+
+type StatementList = []Statement
 
 // Identifier -
 type Identifier struct {

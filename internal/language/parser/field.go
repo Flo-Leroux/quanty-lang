@@ -8,14 +8,17 @@ import (
 func (p *Parser) parseField() *ast.Field {
 	f := &ast.Field{
 		Name:       p.currentToken,
-		Selections: []*ast.Field{},
+		Selections: ast.SelectionList{},
 	}
 
 	if p.peekTokenIs(token.LBRACE) {
 		p.wrapWith(
 			BraceWrapper,
 			func() {
-				if p.currentToken.Type == token.IDENT {
+				switch p.currentToken.Type {
+				case token.STRING:
+					f.Selections = append(f.Selections, p.parseStringValue())
+				case token.IDENT:
 					f.Selections = append(f.Selections, p.parseField())
 				}
 			},
@@ -23,4 +26,11 @@ func (p *Parser) parseField() *ast.Field {
 	}
 
 	return f
+}
+
+func (p *Parser) parseStringValue() *ast.StringValue {
+	return &ast.StringValue{
+		Token: p.currentToken,
+		Value: p.currentToken.Literal,
+	}
 }

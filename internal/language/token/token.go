@@ -33,6 +33,8 @@ const (
 	EOF     = "EOF"
 	ILLEGAL = "ILLEGAL"
 
+	STRING = "STRING"
+
 	//
 	// Identifiers & Literals
 	//
