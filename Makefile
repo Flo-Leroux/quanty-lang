@@ -45,4 +45,4 @@ lint.ci:
 
 lint:
 	@echo "== 🙆 linter =="
-	golangci-lint run --fix
+	golangci-lint run ./... --fix
