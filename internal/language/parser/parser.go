@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/Flo-Leroux/quanty-lang/internal/errors"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/lexer"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/token"
@@ -24,7 +25,7 @@ type Parser struct {
 	l              *lexer.Lexer
 	currentToken   token.Token
 	peekToken      token.Token
-	errors         []error
+	errors         []errors.Error
 	prefixParseFns map[token.Type]prefixParseFn
 	infixParseFunc map[token.Type]infixParseFn
 	stackWrapper   []token.Type
@@ -39,7 +40,7 @@ type (
 func NewParser(str string) (p *Parser) {
 	p = &Parser{
 		l:      lexer.NewLexer(str),
-		errors: make([]error, 0),
+		errors: make([]errors.Error, 0),
 	}
 
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
@@ -106,7 +107,7 @@ func (p *Parser) Error() error {
 }
 
 // Errors -
-func (p *Parser) Errors() []error {
+func (p *Parser) Errors() []errors.Error {
 	return p.errors
 }
 
