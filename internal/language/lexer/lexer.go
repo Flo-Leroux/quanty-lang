@@ -47,6 +47,9 @@ func (l *Lexer) NextToken() (tok token.Token) {
 		tok = token.New(token.NEWLINE, l.ch)
 	case ';':
 		tok = token.New(token.NEWLINE, l.ch)
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.lexDoubleQuote()
 	// case '=':
 	// 	tok = token.New(token.ASSIGN, l.ch)
 	// case '@':
@@ -94,6 +97,16 @@ func (l *Lexer) NextToken() (tok token.Token) {
 // 	return l.input[position:l.position]
 // }
 
+// lexDoubleQuote -
+func (l *Lexer) lexDoubleQuote() (lit string) {
+	l.readChar()
+	position := l.position
+	for !isDoubleQuote(l.ch) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
 // lexIdent -
 func (l *Lexer) lexIdent() string {
 	position := l.position
@@ -121,6 +134,11 @@ func (l *Lexer) skipUntilNewline() {
 // func isBacktick(r byte) bool {
 // 	return r == '`'
 // }
+
+// isDoubleQuote -
+func isDoubleQuote(r byte) bool {
+	return r == '"'
+}
 
 // isSpace -
 func isSpace(r byte) bool {

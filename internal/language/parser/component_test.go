@@ -287,7 +287,7 @@ func TestParserComponent(t *testing.T) {
 
 			})
 
-			SkipConvey("With string content", func() {
+			Convey("With string content at level 1", func() {
 				component := `
 				component Main {
 					"Hello World!"
@@ -308,7 +308,15 @@ func TestParserComponent(t *testing.T) {
 								Type:    token.IDENT,
 								Literal: "Main",
 							},
-							Selections: ast.SelectionList{},
+							Selections: ast.SelectionList{
+								&ast.StringValue{
+									Token: token.Token{
+										Type:    token.STRING,
+										Literal: "Hello World!",
+									},
+									Value: "Hello World!",
+								},
+							},
 						},
 					},
 				}
@@ -316,6 +324,81 @@ func TestParserComponent(t *testing.T) {
 				So(schema, ShouldResemble, result)
 				So(schemaParser.Errors(), ShouldBeEmpty)
 			})
+
+			Convey("With string content at level 2", func() {
+				component := `
+				component Main {
+					p {
+						"Hello World - Level 2-1!"
+					}
+					"Hello World - Level 1!"
+					p {
+						"Hello World - Level 2-2!"
+					}
+				}`
+
+				schemaParser := parser.NewParser(component)
+
+				schema := schemaParser.Parse()
+
+				result := &ast.Schema{
+					Statements: []ast.Statement{
+						&ast.ComponentStatement{
+							Token: token.Token{
+								Type:    token.COMPONENT,
+								Literal: "component",
+							},
+							Name: token.Token{
+								Type:    token.IDENT,
+								Literal: "Main",
+							},
+							Selections: ast.SelectionList{
+								&ast.Field{
+									Name: token.Token{
+										Type:    token.IDENT,
+										Literal: "p",
+									},
+									Selections: []ast.Selection{
+										&ast.StringValue{
+											Token: token.Token{
+												Type:    token.STRING,
+												Literal: "Hello World - Level 2-1!",
+											},
+											Value: "Hello World - Level 2-1!",
+										},
+									},
+								},
+								&ast.StringValue{
+									Token: token.Token{
+										Type:    token.STRING,
+										Literal: "Hello World - Level 1!",
+									},
+									Value: "Hello World - Level 1!",
+								},
+								&ast.Field{
+									Name: token.Token{
+										Type:    token.IDENT,
+										Literal: "p",
+									},
+									Selections: []ast.Selection{
+										&ast.StringValue{
+											Token: token.Token{
+												Type:    token.STRING,
+												Literal: "Hello World - Level 2-2!",
+											},
+											Value: "Hello World - Level 2-2!",
+										},
+									},
+								},
+							},
+						},
+					},
+				}
+
+				So(schema, ShouldResemble, result)
+				So(schemaParser.Errors(), ShouldBeEmpty)
+			})
+
 		})
 	})
 }

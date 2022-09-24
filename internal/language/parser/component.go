@@ -16,7 +16,10 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	p.wrapWith(
 		BraceWrapper,
 		func() {
-			if token.IDENT == p.currentToken.Type {
+			switch p.currentToken.Type {
+			case token.STRING:
+				stmt.Selections = append(stmt.Selections, p.parseStringValue())
+			case token.IDENT:
 				stmt.Selections = append(stmt.Selections, p.parseField())
 			}
 		},

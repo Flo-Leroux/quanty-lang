@@ -48,3 +48,23 @@ func (f *Field) String() string {
 
 	return sb.String()
 }
+
+// StringValue -
+type StringValue struct {
+	Token token.Token // token.STRING
+	Value string
+}
+
+func (s *StringValue) statementNode() {}
+
+func (s *StringValue) selectionNode() {}
+
+// TokenLiteral -
+func (s *StringValue) TokenLiteral() string {
+	return s.Token.Literal
+}
+
+// String -
+func (s *StringValue) String() string {
+	return s.Value
+}

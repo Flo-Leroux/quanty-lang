@@ -84,3 +84,35 @@ func TestField(t *testing.T) {
 		}
 	})
 }
+
+// TestStringValue -
+func TestStringValue(t *testing.T) {
+	type test struct {
+		name   string
+		input  *ast.StringValue
+		result string
+	}
+
+	tests := []test{
+		{
+			name: "When selection is empty",
+			input: &ast.StringValue{
+				Token: token.Token{
+					Type:    token.STRING,
+					Literal: "Hello World!",
+				},
+				Value: "Hello World!",
+			},
+			result: "Hello World!",
+		},
+	}
+
+	Convey("Subject: Stringify", t, func() {
+
+		for _, test := range tests {
+			Convey(test.name, func() {
+				So(test.input.String(), ShouldEqual, test.result)
+			})
+		}
+	})
+}
