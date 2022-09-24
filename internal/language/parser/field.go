@@ -8,7 +8,7 @@ import (
 func (p *Parser) parseField() *ast.Field {
 	f := &ast.Field{
 		Name:       p.currentToken,
-		Selections: []*ast.Field{},
+		Selections: ast.SelectionList{},
 	}
 
 	if p.peekTokenIs(token.LBRACE) {

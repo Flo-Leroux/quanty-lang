@@ -21,7 +21,7 @@ func TestField(t *testing.T) {
 			name: "When selection is empty",
 			input: &ast.Field{
 				Name:       token.Token{Type: token.IDENT, Literal: "div"},
-				Selections: []*ast.Field{},
+				Selections: ast.SelectionList{},
 			},
 			result: "div",
 		},
@@ -32,14 +32,14 @@ func TestField(t *testing.T) {
 					Type:    token.IDENT,
 					Literal: "div",
 				},
-				Selections: []*ast.Field{
-					{
+				Selections: ast.SelectionList{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "p"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
-					{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "img"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
 				},
 			},
@@ -52,22 +52,22 @@ func TestField(t *testing.T) {
 					Type:    token.IDENT,
 					Literal: "div",
 				},
-				Selections: []*ast.Field{
-					{
+				Selections: ast.SelectionList{
+					&ast.Field{
 						Name: token.Token{
 							Type:    token.IDENT,
 							Literal: "p",
 						},
-						Selections: []*ast.Field{
-							{
+						Selections: ast.SelectionList{
+							&ast.Field{
 								Name:       token.Token{Type: token.IDENT, Literal: "span"},
-								Selections: []*ast.Field{},
+								Selections: ast.SelectionList{},
 							},
 						},
 					},
-					{
+					&ast.Field{
 						Name:       token.Token{Type: token.IDENT, Literal: "img"},
-						Selections: []*ast.Field{},
+						Selections: ast.SelectionList{},
 					},
 				},
 			},

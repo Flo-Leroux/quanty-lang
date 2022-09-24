@@ -20,6 +20,7 @@ func TestComponent(t *testing.T) {
 				Type:    token.IDENT,
 				Literal: "Main",
 			},
+			Selections: ast.SelectionList{},
 		}
 
 		Convey("When selection is empty", func() {

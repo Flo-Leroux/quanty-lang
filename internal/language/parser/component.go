@@ -7,7 +7,7 @@ import (
 
 // parseComponentStatement returns a COMPONENT Statement AST Node
 func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
-	stmt := &ast.ComponentStatement{Token: p.currentToken, Fields: []*ast.Field{}}
+	stmt := &ast.ComponentStatement{Token: p.currentToken, Selections: ast.SelectionList{}}
 	if !p.expectAndNext(token.IDENT) {
 		return nil
 	}
@@ -17,15 +17,10 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 		BraceWrapper,
 		func() {
 			if token.IDENT == p.currentToken.Type {
-				stmt.Fields = append(stmt.Fields, p.parseField())
+				stmt.Selections = append(stmt.Selections, p.parseField())
 			}
 		},
 	)
-
-	// // if p.peekTokenIs(token.OPTION) {
-	// // 	p.next()
-	// // 	stmt.Option = p.currentToken
-	// // }
 
 	return stmt
 }

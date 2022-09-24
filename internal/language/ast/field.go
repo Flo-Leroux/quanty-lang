@@ -9,8 +9,12 @@ import (
 // Field -
 type Field struct {
 	Name       token.Token // token.IDENT
-	Selections []*Field
+	Selections SelectionList
 }
+
+func (f *Field) statementNode() {}
+
+func (f *Field) selectionNode() {}
 
 // TokenLiteral -
 func (ls *Field) TokenLiteral() string {
