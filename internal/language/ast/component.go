@@ -46,7 +46,7 @@ func (ls *ComponentStatement) String() string {
 	// // }
 
 	sb.WriteString("}")
-	// sb.WriteString(" ")
+	// // sb.WriteString(" ")
 
 	// // if ls.Option.Literal != "" {
 	// // 	sb.WriteString("`")
@@ -54,6 +54,6 @@ func (ls *ComponentStatement) String() string {
 	// // 	sb.WriteString("`")
 	// // }
 
-	// sb.WriteString("\n")
+	// // sb.WriteString("\n")
 	return sb.String()
 }

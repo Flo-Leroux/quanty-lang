@@ -15,8 +15,7 @@ func (p *Parser) parseField() *ast.Field {
 		p.wrapWith(
 			BraceWrapper,
 			func() {
-				switch p.currentToken.Type {
-				case token.IDENT:
+				if p.currentToken.Type == token.IDENT {
 					f.Selections = append(f.Selections, p.parseField())
 				}
 			},

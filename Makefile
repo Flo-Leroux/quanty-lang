@@ -1,48 +1,68 @@
-init:
-	@echo "== 👩‍🌾 init =="
-	@echo "== 👩‍🌾 golangci-lint =="
-# https://golangci-lint.run/
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0
+GOBIN = $(PWD)/bin
 
-	@echo "== pre-commit setup =="
-	pip install pre-commit
-	pre-commit install
+.PHONY: clean lint security critic test convey build release precommit.rehooks init
 
-	@echo "== goreleaser setup =="
-	go install github.com/goreleaser/goreleaser@latest
+clean:
+	rm -rf ./tmp coverage.out
 
-	@echo "== install ginkgo =="
-# go install -mod=mod github.com/onsi/ginkgo/v2/ginkgo
-# go get github.com/onsi/gomega/...
+lint:
+	$(GOBIN)/golangci-lint run ./...
 
-	@echo "== install gomock =="
-# go install github.com/golang/mock/mockgen@v1.6.0
+security:
+	$(GOBIN)/gosec -quiet yaml ./...
 
-build.snapshot:
-	@echo "== 👩‍🌾 Build snapshot =="
-	goreleaser release --snapshot --rm-dist
+critic:
+	$(GOBIN)/gocritic check -enableAll -disable commentedOutCode ./...
+
+test: clean lint security critic
+	go test -coverprofile=coverage.out ./...
+	go tool cover -func=coverage.out
+
+convey:
+	$(GOPATH)/bin/goconvey -excludeDirs vendor,node_modules,bin,dist,build,.vscode,samples
+
+# install: test
+# 	CGO_ENABLED=0 go build -ldflags="-s -w" -o $(GOPATH)/bin/cgapp ./cmd/cgapp/main.go
+
+build: test
+	$(GOBIN)/goreleaser --snapshot --skip-publish --rm-dist
+
+release: test
+	git tag -a v$(VERSION) -m "$(VERSION)"
+	$(GOBIN)/goreleaser --snapshot --skip-publish --rm-dist
+
 
 precommit.rehooks:
 	pre-commit autoupdate
 	pre-commit install --install-hooks
 	pre-commit install --hook-type commit-msg
 
-test.ci:
-	@echo "== 🦸‍️ ci.tester =="
-	go test ./...
+init:
+	@echo "== 👩‍🌾 init golangci-lint =="
+	GOBIN=$(GOBIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0
 
-test.ui:
-	@echo "== 🦸‍️ ui.tester =="
-	$GOPATH/bin/goconvey
+	@echo ""
+	@echo "== init pre-commit setup =="
+	pip install pre-commit
+	pre-commit install
+	make precommit.rehooks
 
-test:
-	@echo "== 🦸‍️ tester =="
-	go test ./...
+	@echo ""
+	@echo "== init goreleaser setup =="
+	GOBIN=$(GOBIN) go install github.com/goreleaser/goreleaser@latest
 
-lint.ci:
-	@echo "== 🙆 linter.ci =="
-	golangci-lint run -v ./... --fix
+	@echo ""
+	@echo "== install convey =="
+	go get github.com/smartystreets/goconvey
 
-lint:
-	@echo "== 🙆 linter =="
-	golangci-lint run ./... --fix
+	@echo ""
+	@echo "== install gomock =="
+	GOBIN=$(GOBIN) go install github.com/golang/mock/mockgen@v1.6.0
+
+	@echo ""
+	@echo "== install gosec =="
+	curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s latest
+
+	@echo ""
+	@echo "== install go-critic =="
+	GOBIN=$(GOBIN) go install -v github.com/go-critic/go-critic/cmd/gocritic@latest

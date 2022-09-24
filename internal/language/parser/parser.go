@@ -44,10 +44,10 @@ func NewParser(str string) (p *Parser) {
 
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
-	// p.registerPrefix(token.NOT, p.parsePrefixExpression)
+	// // p.registerPrefix(token.NOT, p.parsePrefixExpression)
 
 	p.infixParseFunc = make(map[token.Type]infixParseFn)
-	// p.registerInfix(token.AND, p.parseInfixExpression)
+	// // p.registerInfix(token.AND, p.parseInfixExpression)
 	// p.registerInfix(token.OR, p.parseInfixExpression)
 
 	p.next()
@@ -100,7 +100,7 @@ func (p *Parser) Error() error {
 		return nil
 	}
 	panic(p.errors[0])
-	// return error.New(errors.Validation).SetParams(map[string]interface{}{
+	// // return error.New(errors.Validation).SetParams(map[string]interface{}{
 	// 	"schema": strings.Join(p.errors, ","),
 	// })
 }
@@ -122,10 +122,6 @@ func (p *Parser) Parse() *ast.Schema {
 		}
 		p.next()
 	}
-
-	// if len(p.stackWrapper) != 0 {
-	// 	p.peekWrapperErrors()
-	// }
 
 	return schema
 }

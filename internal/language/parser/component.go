@@ -16,17 +16,16 @@ func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
 	p.wrapWith(
 		BraceWrapper,
 		func() {
-			switch p.currentToken.Type {
-			case token.IDENT:
+			if token.IDENT == p.currentToken.Type {
 				stmt.Fields = append(stmt.Fields, p.parseField())
 			}
 		},
 	)
 
-	// if p.peekTokenIs(token.OPTION) {
-	// 	p.next()
-	// 	stmt.Option = p.currentToken
-	// }
+	// // if p.peekTokenIs(token.OPTION) {
+	// // 	p.next()
+	// // 	stmt.Option = p.currentToken
+	// // }
 
 	return stmt
 }

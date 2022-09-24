@@ -13,7 +13,7 @@ var (
 )
 
 func main() {
-	user, err := user.Current()
+	usr, err := user.Current()
 	if err != nil {
 		panic(err)
 	}
@@ -24,6 +24,6 @@ This is the Quanty Query Language!
 Version: %s
 Commit: %s
 Built at %s by %s`,
-		user.Username, version, commit, date, builtBy)
+		usr.Username, version, commit, date, builtBy)
 	fmt.Println()
 }

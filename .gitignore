@@ -19,3 +19,4 @@ tmp/
 .vscode
 
 dist/
+bin/
