@@ -6,10 +6,7 @@ import (
 )
 
 func (p *Parser) parseField() *ast.Field {
-	f := &ast.Field{
-		Name:       p.currentToken,
-		Selections: ast.SelectionList{},
-	}
+	f := ast.NewField(p.currentToken.Literal)
 
 	if p.peekTokenIs(token.LBRACE) {
 		p.wrapWith(
@@ -17,9 +14,9 @@ func (p *Parser) parseField() *ast.Field {
 			func() {
 				switch p.currentToken.Type {
 				case token.STRING:
-					f.Selections = append(f.Selections, p.parseStringValue())
+					f.WithSelections(p.parseStringValue())
 				case token.IDENT:
-					f.Selections = append(f.Selections, p.parseField())
+					f.WithSelections(p.parseField())
 				}
 			},
 		)
@@ -29,8 +26,5 @@ func (p *Parser) parseField() *ast.Field {
 }
 
 func (p *Parser) parseStringValue() *ast.StringValue {
-	return &ast.StringValue{
-		Token: p.currentToken,
-		Value: p.currentToken.Literal,
-	}
+	return ast.NewStringValue(p.currentToken.Literal)
 }

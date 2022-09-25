@@ -1,22 +1,31 @@
 package ast
 
-import "github.com/Flo-Leroux/quanty-lang/internal/language/token"
-
 // Node -
 type Node interface {
-	TokenLiteral() string
-	String() string
+	node()
+}
+
+// NodeList T -
+type NodeList = List[Node]
+
+// New Node list
+func NewNodeList() *NodeList {
+	return NewList[Node]()
 }
 
 // Expression -
 type Expression interface {
 	Node
 	expressionNode()
-	IsInfix() bool
-	Type() string
 }
 
-type ExpressionList = []Expression
+// ExpressionList T -
+type ExpressionList = List[Expression]
+
+// New Expression list
+func NewExpressionList() *ExpressionList {
+	return NewList[Expression]()
+}
 
 // Statement -
 type Statement interface {
@@ -24,33 +33,10 @@ type Statement interface {
 	statementNode()
 }
 
-type StatementList = []Statement
+// StatementList T -
+type StatementList = List[Statement]
 
-// Identifier -
-type Identifier struct {
-	Token token.Token // token.IDENT
-	Value string
-}
-
-// statementNode -
-func (ls *Identifier) expressionNode() {}
-
-// TokenLiteral -
-func (ls *Identifier) TokenLiteral() string {
-	return ls.Token.Literal
-}
-
-// String -
-func (ls *Identifier) String() string {
-	return ls.Value
-}
-
-// IsInfix -
-func (ls *Identifier) IsInfix() bool {
-	return false
-}
-
-// Type -
-func (ls *Identifier) Type() string {
-	return "identifier"
+// New Statement list
+func NewStatementList() *StatementList {
+	return NewList[Statement]()
 }

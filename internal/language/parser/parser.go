@@ -44,7 +44,7 @@ func NewParser(str string) (p *Parser) {
 	}
 
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
-	p.registerPrefix(token.IDENT, p.parseIdentifier)
+	// // p.registerPrefix(token.IDENT, p.parseIdentifier)
 	// // p.registerPrefix(token.NOT, p.parsePrefixExpression)
 
 	p.infixParseFunc = make(map[token.Type]infixParseFn)
@@ -101,9 +101,6 @@ func (p *Parser) Error() error {
 		return nil
 	}
 	panic(p.errors[0])
-	// // return error.New(errors.Validation).SetParams(map[string]interface{}{
-	// 	"schema": strings.Join(p.errors, ","),
-	// })
 }
 
 // Errors -
@@ -113,13 +110,12 @@ func (p *Parser) Errors() []errors.Error {
 
 // Parse -
 func (p *Parser) Parse() *ast.Schema {
-	schema := &ast.Schema{}
-	schema.Statements = []ast.Statement{}
+	schema := ast.NewSchema()
 
 	for !p.currentTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
-			schema.Statements = append(schema.Statements, stmt)
+			schema.WithStatements(stmt)
 		}
 		p.next()
 	}
@@ -135,14 +131,4 @@ func (p *Parser) expectAndNext(t token.Type) bool {
 	}
 	p.peekError(t)
 	return false
-}
-
-// parseIdentifier
-func (p *Parser) parseIdentifier() ast.Expression {
-	return &ast.Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
-}
-
-// registerPrefix
-func (p *Parser) registerPrefix(tokenType token.Type, fn prefixParseFn) {
-	p.prefixParseFns[tokenType] = fn
 }

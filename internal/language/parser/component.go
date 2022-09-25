@@ -7,23 +7,23 @@ import (
 
 // parseComponentStatement returns a COMPONENT Statement AST Node
 func (p *Parser) parseComponentStatement() *ast.ComponentStatement {
-	stmt := &ast.ComponentStatement{Token: p.currentToken, Selections: ast.SelectionList{}}
 	if !p.expectAndNext(token.IDENT) {
 		return nil
 	}
-	stmt.Name = p.currentToken
+
+	cs := ast.NewComponentStatement(p.currentToken.Literal)
 
 	p.wrapWith(
 		BraceWrapper,
 		func() {
 			switch p.currentToken.Type {
 			case token.STRING:
-				stmt.Selections = append(stmt.Selections, p.parseStringValue())
+				cs.WithSelections(p.parseStringValue())
 			case token.IDENT:
-				stmt.Selections = append(stmt.Selections, p.parseField())
+				cs.WithSelections(p.parseField())
 			}
 		},
 	)
 
-	return stmt
+	return cs
 }

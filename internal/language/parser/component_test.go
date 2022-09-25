@@ -5,7 +5,6 @@ import (
 
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/parser"
-	"github.com/Flo-Leroux/quanty-lang/internal/language/token"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -69,21 +68,10 @@ func TestParserComponent(t *testing.T) {
 
 				schema := schemaParser.Parse()
 
-				result := &ast.Schema{
-					Statements: []ast.Statement{
-						&ast.ComponentStatement{
-							Token: token.Token{
-								Type:    token.COMPONENT,
-								Literal: "component",
-							},
-							Name: token.Token{
-								Type:    token.IDENT,
-								Literal: "Main",
-							},
-							Selections: ast.SelectionList{},
-						},
-					},
-				}
+				result := ast.NewSchema().
+					WithStatements(
+						ast.NewComponentStatement("Main"),
+					)
 
 				So(schema, ShouldResemble, result)
 				So(schemaParser.Errors(), ShouldBeEmpty)
@@ -102,36 +90,14 @@ func TestParserComponent(t *testing.T) {
 
 				schema := schemaParser.Parse()
 
-				result := &ast.Schema{
-					Statements: ast.StatementList{
-						&ast.ComponentStatement{
-							Token: token.Token{
-								Type:    token.COMPONENT,
-								Literal: "component",
-							},
-							Name: token.Token{
-								Type:    token.IDENT,
-								Literal: "Main",
-							},
-							Selections: ast.SelectionList{
-								&ast.Field{
-									Name: token.Token{
-										Type:    token.IDENT,
-										Literal: "div",
-									},
-									Selections: ast.SelectionList{},
-								},
-								&ast.Field{
-									Name: token.Token{
-										Type:    token.IDENT,
-										Literal: "img",
-									},
-									Selections: ast.SelectionList{},
-								},
-							},
-						},
-					},
-				}
+				result := ast.NewSchema().
+					WithStatements(
+						ast.NewComponentStatement("Main").
+							WithSelections(
+								ast.NewField("div"),
+								ast.NewField("img"),
+							),
+					)
 
 				So(schema, ShouldResemble, result)
 				So(schemaParser.Errors(), ShouldBeEmpty)
@@ -154,51 +120,18 @@ func TestParserComponent(t *testing.T) {
 
 					schema := schemaParser.Parse()
 
-					result := &ast.Schema{
-						Statements: []ast.Statement{
-							&ast.ComponentStatement{
-								Token: token.Token{
-									Type:    token.COMPONENT,
-									Literal: "component",
-								},
-								Name: token.Token{
-									Type:    token.IDENT,
-									Literal: "Main",
-								},
-								Selections: ast.SelectionList{
-									&ast.Field{
-										Name: token.Token{
-											Type:    token.IDENT,
-											Literal: "div",
-										},
-										Selections: ast.SelectionList{
-											&ast.Field{
-												Name: token.Token{
-													Type:    token.IDENT,
-													Literal: "span",
-												},
-												Selections: ast.SelectionList{},
-											},
-											&ast.Field{
-												Name: token.Token{
-													Type:    token.IDENT,
-													Literal: "p",
-												},
-												Selections: ast.SelectionList{},
-											},
-										},
-									},
-									&ast.Field{
-										Name: token.Token{
-											Type:    token.IDENT,
-											Literal: "img",
-										},
-										Selections: ast.SelectionList{},
-									},
-								},
-							},
-						},
-					}
+					result := ast.NewSchema().
+						WithStatements(
+							ast.NewComponentStatement("Main").
+								WithSelections(
+									ast.NewField("div").
+										WithSelections(
+											ast.NewField("span"),
+											ast.NewField("p"),
+										),
+									ast.NewField("img"),
+								),
+						)
 
 					So(schema, ShouldResemble, result)
 					So(schemaParser.Errors(), ShouldBeEmpty)
@@ -297,29 +230,13 @@ func TestParserComponent(t *testing.T) {
 
 				schema := schemaParser.Parse()
 
-				result := &ast.Schema{
-					Statements: []ast.Statement{
-						&ast.ComponentStatement{
-							Token: token.Token{
-								Type:    token.COMPONENT,
-								Literal: "component",
-							},
-							Name: token.Token{
-								Type:    token.IDENT,
-								Literal: "Main",
-							},
-							Selections: ast.SelectionList{
-								&ast.StringValue{
-									Token: token.Token{
-										Type:    token.STRING,
-										Literal: "Hello World!",
-									},
-									Value: "Hello World!",
-								},
-							},
-						},
-					},
-				}
+				result := ast.NewSchema().
+					WithStatements(
+						ast.NewComponentStatement("Main").
+							WithSelections(
+								ast.NewStringValue("Hello World!"),
+							),
+					)
 
 				So(schema, ShouldResemble, result)
 				So(schemaParser.Errors(), ShouldBeEmpty)
@@ -341,59 +258,21 @@ func TestParserComponent(t *testing.T) {
 
 				schema := schemaParser.Parse()
 
-				result := &ast.Schema{
-					Statements: []ast.Statement{
-						&ast.ComponentStatement{
-							Token: token.Token{
-								Type:    token.COMPONENT,
-								Literal: "component",
-							},
-							Name: token.Token{
-								Type:    token.IDENT,
-								Literal: "Main",
-							},
-							Selections: ast.SelectionList{
-								&ast.Field{
-									Name: token.Token{
-										Type:    token.IDENT,
-										Literal: "p",
-									},
-									Selections: []ast.Selection{
-										&ast.StringValue{
-											Token: token.Token{
-												Type:    token.STRING,
-												Literal: "Hello World - Level 2-1!",
-											},
-											Value: "Hello World - Level 2-1!",
-										},
-									},
-								},
-								&ast.StringValue{
-									Token: token.Token{
-										Type:    token.STRING,
-										Literal: "Hello World - Level 1!",
-									},
-									Value: "Hello World - Level 1!",
-								},
-								&ast.Field{
-									Name: token.Token{
-										Type:    token.IDENT,
-										Literal: "p",
-									},
-									Selections: []ast.Selection{
-										&ast.StringValue{
-											Token: token.Token{
-												Type:    token.STRING,
-												Literal: "Hello World - Level 2-2!",
-											},
-											Value: "Hello World - Level 2-2!",
-										},
-									},
-								},
-							},
-						},
-					},
-				}
+				result := ast.NewSchema().
+					WithStatements(
+						ast.NewComponentStatement("Main").
+							WithSelections(
+								ast.NewField("p").
+									WithSelections(
+										ast.NewStringValue("Hello World - Level 2-1!"),
+									),
+								ast.NewStringValue("Hello World - Level 1!"),
+								ast.NewField("p").
+									WithSelections(
+										ast.NewStringValue("Hello World - Level 2-2!"),
+									),
+							),
+					)
 
 				So(schema, ShouldResemble, result)
 				So(schemaParser.Errors(), ShouldBeEmpty)

@@ -1,6 +1,6 @@
 module github.com/Flo-Leroux/quanty-lang
 
-go 1.18
+go 1.19
 
 require github.com/smartystreets/goconvey v1.7.2
 
