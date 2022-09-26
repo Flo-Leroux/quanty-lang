@@ -14,8 +14,9 @@ func TestList(t *testing.T) {
 		var strList *ast.List[string]
 
 		Convey("New List", func() {
-			strList := ast.NewList[string]()
+			strList := ast.NewList[string]("string")
 			So(strList, ShouldHaveSameTypeAs, ast.List[string]{})
+			So(strList.Type(), ShouldEqual, "string")
 		})
 
 		Convey("Length", func() {

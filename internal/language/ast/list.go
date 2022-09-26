@@ -1,14 +1,21 @@
 package ast
 
 // List T -
-type List[T interface{}] struct {
+type List[T any] struct {
+	typ   string
 	items []T
 }
 
-func NewList[T interface{}]() *List[T] {
+func NewList[T any](typ string) *List[T] {
 	return &List[T]{
 		items: make([]T, 0),
+		typ:   typ,
 	}
+}
+
+// Type -
+func (l *List[T]) Type() string {
+	return l.typ
 }
 
 // Len -

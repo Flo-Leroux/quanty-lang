@@ -2,7 +2,7 @@ package ast
 
 // Schema -
 type Schema struct {
-	statements *StatementList
+	statements *List[Statement]
 }
 
 // NewSchema -
@@ -21,6 +21,11 @@ func (s *Schema) WithStatements(stms ...Statement) *Schema {
 }
 
 // Statements -
-func (s *Schema) Statements() *StatementList {
+func (s *Schema) Statements() *List[Statement] {
 	return s.statements
+}
+
+// Accept -
+func (s *Schema) Accept(v Visitor[interface{}]) {
+	v.VisitSchema(s)
 }
