@@ -19,7 +19,7 @@ func (sv *StringValue) node() {}
 func (sv *StringValue) statementNode() {}
 
 // Accept -
-func (sv *StringValue) Accept(v Visitor[any]) {
+func (sv *StringValue) Accept(v Visitor) {
 	v.VisitStringValue(sv)
 }
 
@@ -48,7 +48,7 @@ func (f *Field) node() {}
 func (f *Field) statementNode() {}
 
 // Accept -
-func (f *Field) Accept(v Visitor[any]) {
+func (f *Field) Accept(v Visitor) {
 	v.VisitField(f)
 }
 

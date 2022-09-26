@@ -20,7 +20,7 @@ func (cs *ComponentStatement) node() {}
 func (cs *ComponentStatement) statementNode() {}
 
 // Accept -
-func (cs *ComponentStatement) Accept(v Visitor[any]) {
+func (cs *ComponentStatement) Accept(v Visitor) {
 	v.VisitComponentStatement(cs)
 }
 

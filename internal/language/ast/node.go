@@ -24,7 +24,7 @@ func NewExpressionList() *List[Expression] {
 // Statement -
 type Statement interface {
 	Node
-	Visitable[any]
+	Visitable
 	statementNode()
 }
 

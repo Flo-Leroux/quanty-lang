@@ -1,14 +1,14 @@
 package ast
 
-// Visitable T -
-type Visitable[T any] interface {
-	Accept(Visitor[T])
+// Visitable -
+type Visitable interface {
+	Accept(Visitor)
 }
 
-// Visitor T -
-type Visitor[T any] interface {
-	VisitSchema(*Schema) T
-	VisitComponentStatement(*ComponentStatement) T
-	VisitStringValue(*StringValue) T
-	VisitField(*Field) T
+// Visitor -
+type Visitor interface {
+	VisitSchema(*Schema)
+	VisitComponentStatement(*ComponentStatement)
+	VisitField(*Field)
+	VisitStringValue(*StringValue)
 }

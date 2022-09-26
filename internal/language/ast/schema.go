@@ -26,6 +26,6 @@ func (s *Schema) Statements() *List[Statement] {
 }
 
 // Accept -
-func (s *Schema) Accept(v Visitor[interface{}]) {
+func (s *Schema) Accept(v Visitor) {
 	v.VisitSchema(s)
 }
