@@ -5,12 +5,9 @@ type Node interface {
 	node()
 }
 
-// NodeList T -
-type NodeList = List[Node]
-
 // New Node list
-func NewNodeList() *NodeList {
-	return NewList[Node]()
+func NewNodeList() *List[Node] {
+	return NewList[Node]("node")
 }
 
 // Expression -
@@ -19,24 +16,19 @@ type Expression interface {
 	expressionNode()
 }
 
-// ExpressionList T -
-type ExpressionList = List[Expression]
-
 // New Expression list
-func NewExpressionList() *ExpressionList {
-	return NewList[Expression]()
+func NewExpressionList() *List[Expression] {
+	return NewList[Expression]("expression")
 }
 
 // Statement -
 type Statement interface {
 	Node
+	Visitable
 	statementNode()
 }
 
-// StatementList T -
-type StatementList = List[Statement]
-
 // New Statement list
-func NewStatementList() *StatementList {
-	return NewList[Statement]()
+func NewStatementList() *List[Statement] {
+	return NewList[Statement]("statement")
 }

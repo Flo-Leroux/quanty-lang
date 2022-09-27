@@ -3,7 +3,7 @@ package ast
 // ComponentStatement -
 type ComponentStatement struct {
 	name       string
-	selections *StatementList
+	selections *List[Statement]
 }
 
 func NewComponentStatement(name string) *ComponentStatement {
@@ -19,6 +19,11 @@ func (cs *ComponentStatement) node() {}
 // statementNode -
 func (cs *ComponentStatement) statementNode() {}
 
+// Accept -
+func (cs *ComponentStatement) Accept(v Visitor) {
+	v.VisitComponentStatement(cs)
+}
+
 // Name -
 func (cs *ComponentStatement) Name() string {
 	return cs.name
@@ -33,6 +38,6 @@ func (cs *ComponentStatement) WithSelections(stmts ...Statement) *ComponentState
 }
 
 // Selections -
-func (cs *ComponentStatement) Selections() *StatementList {
+func (cs *ComponentStatement) Selections() *List[Statement] {
 	return cs.selections
 }

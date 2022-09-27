@@ -18,6 +18,11 @@ func (sv *StringValue) node() {}
 // statementNode -
 func (sv *StringValue) statementNode() {}
 
+// Accept -
+func (sv *StringValue) Accept(v Visitor) {
+	v.VisitStringValue(sv)
+}
+
 // Value -
 func (sv *StringValue) Value() string {
 	return sv.value
@@ -26,7 +31,7 @@ func (sv *StringValue) Value() string {
 // Field -
 type Field struct {
 	name       string
-	selections *StatementList
+	selections *List[Statement]
 }
 
 func NewField(name string) *Field {
@@ -42,6 +47,11 @@ func (f *Field) node() {}
 // statementNode -
 func (f *Field) statementNode() {}
 
+// Accept -
+func (f *Field) Accept(v Visitor) {
+	v.VisitField(f)
+}
+
 // Name -
 func (f *Field) Name() string {
 	return f.name
@@ -55,6 +65,6 @@ func (f *Field) WithSelections(stmts ...Statement) *Field {
 }
 
 // Selections -
-func (f *Field) Selections() *StatementList {
+func (f *Field) Selections() *List[Statement] {
 	return f.selections
 }
