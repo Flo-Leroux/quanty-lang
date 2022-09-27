@@ -19,7 +19,7 @@ test: clean lint security critic
 	go tool cover -func=coverage.out
 
 convey:
-	$(GOPATH)/bin/goconvey -excludedDirs vendor,node_modules,bin,dist,build,.vscode,samples
+	$(GOPATH)/bin/goconvey -excludedDirs vendor,node_modules,bin,dist,build,.vscode,samples -launchBrowser=false
 
 # install: test
 # 	CGO_ENABLED=0 go build -ldflags="-s -w" -o $(GOPATH)/bin/cgapp ./cmd/cgapp/main.go
@@ -30,7 +30,6 @@ build: test
 release: test
 	git tag -a v$(VERSION) -m "$(VERSION)"
 	$(GOBIN)/goreleaser --snapshot --skip-publish --rm-dist
-
 
 precommit.rehooks:
 	pre-commit autoupdate

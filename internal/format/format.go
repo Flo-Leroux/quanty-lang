@@ -2,6 +2,7 @@ package format
 
 import (
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
@@ -14,18 +15,18 @@ type Fmt struct {
 }
 
 func (f *Fmt) tab() *Fmt {
-	for i := 0; i < f.indentLvl; i++ {
-		f.WriteString("\t")
-	}
+	f.WriteString(
+		strings.Repeat("\t", f.indentLvl),
+	)
 	return f
 }
 
 func (f *Fmt) indent() {
-	f.indentLvl++
+	f.indentLvl += 1
 }
 
 func (f *Fmt) dedent() *Fmt {
-	f.indentLvl--
+	f.indentLvl -= 1
 	return f
 }
 
@@ -58,10 +59,16 @@ func New() *Fmt {
 	}
 }
 
-// Render -
-func (f *Fmt) Render(entity ast.Visitable) string {
-	entity.Accept(f)
-	return f.String()
+// String -
+func (f *Fmt) String(v ast.Visitable) string {
+	v.Accept(f)
+	return f.Builder.String()
+}
+
+// Write -
+func (f *Fmt) Write(w io.Writer, v ast.Visitable) (n int, err error) {
+	v.Accept(f)
+	return w.Write([]byte(f.Builder.String()))
 }
 
 // VisitSchema -
@@ -108,9 +115,7 @@ func (f *Fmt) VisitComponentStatement(ctx *ast.ComponentStatement) {
 
 // VisitField -
 func (f *Fmt) VisitField(ctx *ast.Field) {
-	f.
-		tab().
-		write(ctx.Name())
+	f.write(ctx.Name())
 
 	if !ctx.Selections().IsEmpty() {
 		f.

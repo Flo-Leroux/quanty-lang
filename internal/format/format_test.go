@@ -1,6 +1,7 @@
 package format_test
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/Flo-Leroux/quanty-lang/internal/format"
@@ -9,7 +10,7 @@ import (
 )
 
 func TestFmt(t *testing.T) {
-	SkipConvey("Subject: Fmt", t, func() {
+	Convey("Subject: Fmt", t, func() {
 
 		var fmt *format.Fmt
 
@@ -23,6 +24,26 @@ func TestFmt(t *testing.T) {
 			fmt = format.New()
 
 			So(fmt, ShouldResemble, &format.Fmt{})
+		})
+
+		Convey("Use io.Write", func() {
+			fmt = format.New()
+
+			tt := test{
+				name: "With 1 Component",
+				args: ast.NewSchema().
+					WithStatements(
+						ast.NewComponentStatement("Main"),
+					),
+				want: `component Main {}
+`,
+			}
+
+			var b bytes.Buffer
+			_, err := fmt.Write(&b, tt.args)
+
+			So(err, ShouldBeNil)
+			So(b.String(), ShouldEqual, tt.want)
 		})
 
 		Convey("Schema", func() {
@@ -58,7 +79,7 @@ component Nav {}
 			for _, tt := range tests {
 				Convey(tt.name, func() {
 					fmt = format.New()
-					rendered := fmt.Render(tt.args)
+					rendered := fmt.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -143,7 +164,7 @@ component Nav {}
 			for _, tt := range tests {
 				Convey(tt.name, func() {
 					fmt = format.New()
-					rendered := fmt.Render(tt.args)
+					rendered := fmt.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -172,7 +193,7 @@ component Nav {}
 			for _, tt := range tests {
 				Convey(tt.name, func() {
 					fmt = format.New()
-					rendered := fmt.Render(tt.args)
+					rendered := fmt.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -191,7 +212,7 @@ component Nav {}
 			for _, tt := range tests {
 				Convey(tt.name, func() {
 					fmt = format.New()
-					rendered := fmt.Render(tt.args)
+					rendered := fmt.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
