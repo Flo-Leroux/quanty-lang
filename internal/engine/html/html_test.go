@@ -4,15 +4,15 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/Flo-Leroux/quanty-lang/internal/engine/html"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
-	"github.com/Flo-Leroux/quanty-lang/internal/transpilers/html"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFmt(t *testing.T) {
 	Convey("Subject: Html", t, func() {
 
-		var h *html.HTML
+		var engine *html.Engine
 
 		type test struct {
 			name string
@@ -21,16 +21,16 @@ func TestFmt(t *testing.T) {
 		}
 
 		Convey("New Html", func() {
-			h = html.New()
+			engine = html.New()
 
-			So(h, ShouldResemble, &html.HTML{})
+			So(engine, ShouldResemble, &html.Engine{})
 		})
 
 		Convey("Use io.Write", func() {
-			h = html.New()
+			engine = html.New()
 
 			tt := test{
-				name: "With 1 Component",
+				name: "Witengine 1 Component",
 				args: ast.NewSchema().
 					WithStatements(
 						ast.NewComponentStatement("Main"),
@@ -39,7 +39,7 @@ func TestFmt(t *testing.T) {
 			}
 
 			var b bytes.Buffer
-			_, err := h.Write(&b, tt.args)
+			_, err := engine.Write(&b, tt.args)
 
 			So(err, ShouldBeNil)
 			So(b.String(), ShouldEqual, tt.want)
@@ -53,7 +53,7 @@ func TestFmt(t *testing.T) {
 					want: "",
 				},
 				{
-					name: "With 1 Component",
+					name: "Witengine 1 Component",
 					args: ast.NewSchema().
 						WithStatements(
 							ast.NewComponentStatement("Main"),
@@ -61,7 +61,7 @@ func TestFmt(t *testing.T) {
 					want: `<Main></Main>`,
 				},
 				{
-					name: "With 2 Components",
+					name: "Witengine 2 Components",
 					args: ast.NewSchema().
 						WithStatements(
 							ast.NewComponentStatement("Main"),
@@ -74,8 +74,8 @@ func TestFmt(t *testing.T) {
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					h = html.New()
-					rendered := h.String(tt.args)
+					engine = html.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -90,7 +90,7 @@ func TestFmt(t *testing.T) {
 					want: `<Main></Main>`,
 				},
 				{
-					name: "With 1 Field",
+					name: "Witengine 1 Field",
 					args: ast.NewComponentStatement("Main").
 						WithSelections(
 							ast.NewField("div"),
@@ -100,7 +100,7 @@ func TestFmt(t *testing.T) {
 </Main>`,
 				},
 				{
-					name: "With 1 StringValue",
+					name: "Witengine 1 StringValue",
 					args: ast.NewComponentStatement("Main").
 						WithSelections(
 							ast.NewStringValue("Hello World!"),
@@ -110,7 +110,7 @@ func TestFmt(t *testing.T) {
 </Main>`,
 				},
 				{
-					name: "With 1 StringValue AND 1 Field",
+					name: "Witengine 1 StringValue AND 1 Field",
 					args: ast.NewComponentStatement("Main").
 						WithSelections(
 							ast.NewField("div"),
@@ -122,7 +122,7 @@ func TestFmt(t *testing.T) {
 </Main>`,
 				},
 				{
-					name: "With multiple selections",
+					name: "Witengine multiple selections",
 					args: ast.NewComponentStatement("Main").
 						WithSelections(
 							ast.NewField("div").
@@ -159,8 +159,8 @@ func TestFmt(t *testing.T) {
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					h = html.New()
-					rendered := h.String(tt.args)
+					engine = html.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -175,7 +175,7 @@ func TestFmt(t *testing.T) {
 					want: "<div></div>",
 				},
 				{
-					name: "With 1 selection level",
+					name: "Witengine 1 selection level",
 					args: ast.NewField("div").
 						WithSelections(
 							ast.NewField("p"),
@@ -188,8 +188,8 @@ func TestFmt(t *testing.T) {
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					h = html.New()
-					rendered := h.String(tt.args)
+					engine = html.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -199,7 +199,7 @@ func TestFmt(t *testing.T) {
 		Convey("StringValue", func() {
 			tests := []test{
 				{
-					name: "With string value",
+					name: "Witengine string value",
 					args: ast.NewStringValue("Hello World!"),
 					want: `Hello World!`,
 				},
@@ -207,8 +207,8 @@ func TestFmt(t *testing.T) {
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					h = html.New()
-					rendered := h.String(tt.args)
+					engine = html.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})

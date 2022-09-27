@@ -4,15 +4,15 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/Flo-Leroux/quanty-lang/internal/engine/format"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
-	"github.com/Flo-Leroux/quanty-lang/internal/transpilers/format"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFmt(t *testing.T) {
 	Convey("Subject: Fmt", t, func() {
 
-		var fmt *format.Fmt
+		var engine *format.Engine
 
 		type test struct {
 			name string
@@ -21,13 +21,13 @@ func TestFmt(t *testing.T) {
 		}
 
 		Convey("New Fmt", func() {
-			fmt = format.New()
+			engine = format.New()
 
-			So(fmt, ShouldResemble, &format.Fmt{})
+			So(engine, ShouldResemble, &format.Engine{})
 		})
 
 		Convey("Use io.Write", func() {
-			fmt = format.New()
+			engine = format.New()
 
 			tt := test{
 				name: "With 1 Component",
@@ -40,7 +40,7 @@ func TestFmt(t *testing.T) {
 			}
 
 			var b bytes.Buffer
-			_, err := fmt.Write(&b, tt.args)
+			_, err := engine.Write(&b, tt.args)
 
 			So(err, ShouldBeNil)
 			So(b.String(), ShouldEqual, tt.want)
@@ -78,8 +78,8 @@ component Nav {}
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					fmt = format.New()
-					rendered := fmt.String(tt.args)
+					engine = format.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -163,8 +163,8 @@ component Nav {}
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					fmt = format.New()
-					rendered := fmt.String(tt.args)
+					engine = format.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -192,8 +192,8 @@ component Nav {}
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					fmt = format.New()
-					rendered := fmt.String(tt.args)
+					engine = format.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})
@@ -211,8 +211,8 @@ component Nav {}
 
 			for _, tt := range tests {
 				Convey(tt.name, func() {
-					fmt = format.New()
-					rendered := fmt.String(tt.args)
+					engine = format.New()
+					rendered := engine.String(tt.args)
 
 					So(rendered, ShouldEqual, tt.want)
 				})

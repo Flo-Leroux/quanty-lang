@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os/user"
+
+	"github.com/Flo-Leroux/quanty-lang/internal/server"
 )
 
 var (
@@ -26,4 +29,8 @@ Commit: %s
 Built at %s by %s`,
 		usr.Username, version, commit, date, builtBy)
 	fmt.Println()
+
+	app := server.Prepare()
+
+	log.Fatal(app.Listen(":8081"))
 }
