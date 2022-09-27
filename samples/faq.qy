@@ -1,0 +1,5 @@
+component Faq {
+  p {
+    "Hello Faq!"
+  }
+}

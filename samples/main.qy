@@ -1,3 +1,8 @@
 component Main {
-  h1
+  h1 {
+    "Hello World! My name is"
+    strong {
+      "Quanty!"
+    }
+  }
 }
