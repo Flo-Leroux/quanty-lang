@@ -10,12 +10,12 @@ import (
 
 // Fmt - implements ast.Visitor
 type Fmt struct {
-	strings.Builder
+	sb        strings.Builder
 	indentLvl int
 }
 
 func (f *Fmt) tab() *Fmt {
-	f.WriteString(
+	f.sb.WriteString(
 		strings.Repeat("\t", f.indentLvl),
 	)
 	return f
@@ -31,22 +31,22 @@ func (f *Fmt) dedent() *Fmt {
 }
 
 func (f *Fmt) cReturn() *Fmt {
-	f.WriteString("\n")
+	f.sb.WriteString("\n")
 	return f
 }
 
 func (f *Fmt) space() *Fmt {
-	f.WriteString(" ")
+	f.sb.WriteString(" ")
 	return f
 }
 
 func (f *Fmt) write(str string) *Fmt {
-	f.WriteString(str)
+	f.sb.WriteString(str)
 	return f
 }
 
 func (f *Fmt) fmt(format string, a ...any) *Fmt {
-	f.WriteString(
+	f.sb.WriteString(
 		fmt.Sprintf(format, a...),
 	)
 	return f
@@ -62,13 +62,13 @@ func New() *Fmt {
 // String -
 func (f *Fmt) String(v ast.Visitable) string {
 	v.Accept(f)
-	return f.Builder.String()
+	return f.sb.String()
 }
 
 // Write -
 func (f *Fmt) Write(w io.Writer, v ast.Visitable) (n int, err error) {
 	v.Accept(f)
-	return w.Write([]byte(f.Builder.String()))
+	return w.Write([]byte(f.sb.String()))
 }
 
 // VisitSchema -
