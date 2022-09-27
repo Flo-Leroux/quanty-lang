@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/Flo-Leroux/quanty-lang/internal/format"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
+	"github.com/Flo-Leroux/quanty-lang/internal/transpilers/format"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
