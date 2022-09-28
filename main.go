@@ -30,7 +30,7 @@ Built at %s by %s`,
 		usr.Username, version, commit, date, builtBy)
 	fmt.Println()
 
-	app := server.Prepare()
+	app := server.Run()
 
 	log.Fatal(app.Listen(":8081"))
 }

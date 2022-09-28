@@ -1,0 +1,9 @@
+component About {
+  h1 {
+    "Make with"
+    strong {
+      "Love"
+    }
+    "by Quan-team!"
+  }
+}
