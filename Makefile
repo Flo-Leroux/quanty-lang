@@ -1,12 +1,15 @@
 GOBIN = $(PWD)/bin
 
-.PHONY: clean lint security critic test convey build release precommit.rehooks init
+.PHONY: clean generate run lint security critic test convey build release precommit.rehooks init
 
 clean:
 	rm -rf ./tmp coverage.out
 
 generate:
 	go generate ./...
+
+run:
+	$(GOBIN)/gow -v -c -e=go,mod,qy run .
 
 lint:
 	$(GOBIN)/golangci-lint run ./...
@@ -68,3 +71,7 @@ init:
 	@echo ""
 	@echo "== install go-critic =="
 	GOBIN=$(GOBIN) go install -v github.com/go-critic/go-critic/cmd/gocritic@latest
+
+	@echo ""
+	@echo "== install gow =="
+	GOBIN=$(GOBIN) go install github.com/mitranim/gow@latest
