@@ -21,21 +21,37 @@ func Run() *fiber.App {
 		Reload(true).
 		Debug(true)
 
+		// Default error handler
+	var DefaultErrorHandler = func(c *fiber.Ctx, err error) error {
+
+		// Default 500 statuscode
+		code := fiber.StatusInternalServerError
+
+		if e, ok := err.(*fiber.Error); ok {
+			// Override status code if fiber.Error type
+			code = e.Code
+
+			if e.Code == fiber.StatusNotFound {
+				return c.Redirect("/404")
+			}
+		}
+
+		// Set Content-Type: text/plain; charset=utf-8
+		c.Set(fiber.HeaderContentType, fiber.MIMETextPlainCharsetUTF8)
+
+		// Return statuscode with error message
+		return c.Status(code).SendString(err.Error())
+	}
+
 	app := fiber.New(fiber.Config{
-		AppName:   "Quanty",
-		GETOnly:   true,
-		Immutable: true,
-		Views:     viewEngine,
+		AppName:      "Quanty",
+		GETOnly:      true,
+		Immutable:    true,
+		Views:        viewEngine,
+		ErrorHandler: DefaultErrorHandler,
 	})
 
-	allPaths := program.AllPaths()
-
-	for _, name := range allPaths {
-		route := "/" + name
-		app.Get(route, func(c *fiber.Ctx) error {
-			return c.Render(c.Route().Name, nil)
-		}).Name(name)
-	}
+	program.RegisterRoutes(app)
 
 	return app
 }

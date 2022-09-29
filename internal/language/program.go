@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/utils"
 )
 
@@ -16,8 +18,11 @@ type Program struct {
 	name       string
 	directory  string
 	fileSystem http.FileSystem
-	files      map[string]*File
-	mutex      sync.Mutex
+
+	files         map[string]*File
+	preBuiltFiles map[string]*File
+
+	mutex sync.Mutex
 
 	debug bool
 }
@@ -44,13 +49,18 @@ func WithDebug() Option {
 
 func New(name string, opts ...Option) (*Program, error) {
 	prog := &Program{
-		name:      name,
-		directory: "./",
-		files:     make(map[string]*File),
+		name:          name,
+		directory:     "./",
+		files:         make(map[string]*File),
+		preBuiltFiles: make(map[string]*File),
 	}
 
 	for _, opt := range opts {
 		opt(prog)
+	}
+
+	if err := prog.LoadPreBuilt(); err != nil {
+		return nil, err
 	}
 
 	if err := prog.Load(); err != nil {
@@ -58,6 +68,27 @@ func New(name string, opts ...Option) (*Program, error) {
 	}
 
 	return prog, nil
+}
+
+func (p *Program) LoadPreBuilt() error {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+
+	for path, raw := range preBuiltPages {
+		file, err := embedToFile(path, raw)
+		if err != nil {
+			return err
+		}
+
+		p.preBuiltFiles[file.name] = file
+
+		// Debugging
+		if p.debug {
+			fmt.Printf("File: %s ready\n", file.name)
+		}
+	}
+
+	return nil
 }
 
 func (p *Program) Load() error {
@@ -120,6 +151,9 @@ func (p *Program) LoadName(name string) error {
 	// #gosec G304
 	buf, err := utils.ReadFile(path, p.fileSystem)
 	if err != nil {
+		if _, ok := preBuiltPages[name]; ok {
+			return p.LoadPreBuiltName(name)
+		}
 		return err
 	}
 
@@ -139,14 +173,56 @@ func (p *Program) LoadName(name string) error {
 	return err
 }
 
-func (p *Program) File(name string) *File {
-	return p.files[name]
+func (p *Program) LoadPreBuiltName(name string) error {
+	if raw, ok := preBuiltPages[name]; ok {
+		file, err := embedToFile(name, raw)
+		if err != nil {
+			return err
+		}
+
+		p.files[file.name] = file
+
+		// Debugging
+		if p.debug {
+			fmt.Printf("File: %s ready\n", file.name)
+		}
+
+		return nil
+	}
+
+	return fmt.Errorf("File not found : %s", name)
 }
 
-func (p *Program) AllPaths() []string {
-	paths := make([]string, 0)
-	for k := range p.files {
-		paths = append(paths, k)
+func (p *Program) File(name string) *File {
+	if file, ok := p.files[name]; ok {
+		return file
 	}
-	return paths
+
+	if file, ok := p.preBuiltFiles[name]; ok {
+		return file
+	}
+
+	return nil
+}
+
+func (p *Program) RegisterRoutes(app *fiber.App) {
+
+	for name := range p.preBuiltFiles {
+		route := "/" + name
+		app.
+			Get(route, func(c *fiber.Ctx) error {
+				return c.Render(c.Route().Name, nil)
+			}).
+			Name(name)
+	}
+
+	for name := range p.files {
+		route := "/" + strings.TrimSuffix(name, "main")
+		app.
+			Get(route, func(c *fiber.Ctx) error {
+				return c.Render(c.Route().Name, nil)
+			}).
+			Name(name)
+	}
+
 }

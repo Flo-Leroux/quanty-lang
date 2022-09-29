@@ -53,3 +53,22 @@ func toFile(path, directory, raw string) (*File, error) {
 
 	return file, nil
 }
+
+func embedToFile(path, raw string) (*File, error) {
+	p := parser.NewParser(raw)
+	s := p.Parse()
+
+	if err := p.Error(); err != nil {
+		return nil, err
+	}
+
+	file := &File{
+		name:   path,
+		path:   path,
+		raw:    raw,
+		parser: p,
+		schema: s,
+	}
+
+	return file, nil
+}

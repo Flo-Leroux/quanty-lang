@@ -1,0 +1,5 @@
+component NotFound {
+  h1 {
+    "Fake 404"
+  }
+}

@@ -3,11 +3,11 @@ package engine
 import (
 	"fmt"
 	"io"
+	"log"
 	"sync"
 
 	"github.com/Flo-Leroux/quanty-lang/internal/engine/html"
 	"github.com/Flo-Leroux/quanty-lang/internal/language"
-	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 )
 
 // Engine struct
@@ -21,7 +21,7 @@ type Engine struct {
 	// lock for funcmap and templates
 	mutex sync.RWMutex
 	// template funcmap
-	funcmap map[string]*ast.Schema
+	funcmap map[string]interface{}
 	// templates
 	Program *language.Program
 }
@@ -29,14 +29,14 @@ type Engine struct {
 // New returns a HTML render engine for Fiber
 func New(program *language.Program) *Engine {
 	return &Engine{
-		funcmap: make(map[string]*ast.Schema),
+		funcmap: make(map[string]interface{}),
 		Program: program,
 	}
 }
 
 // AddFunc adds the function to the template's function map.
 // It is legal to overwrite elements of the default actions
-func (e *Engine) AddFunc(name string, fn *ast.Schema) *Engine {
+func (e *Engine) AddFunc(name string, fn interface{}) *Engine {
 	e.mutex.Lock()
 	e.funcmap[name] = fn
 	e.mutex.Unlock()
@@ -45,7 +45,7 @@ func (e *Engine) AddFunc(name string, fn *ast.Schema) *Engine {
 
 // AddFuncMap adds the functions from a map to the template's function map.
 // It is legal to overwrite elements of the default actions
-func (e *Engine) AddFuncMap(m map[string]*ast.Schema) *Engine {
+func (e *Engine) AddFuncMap(m map[string]interface{}) *Engine {
 	e.mutex.Lock()
 	for name, fn := range m {
 		e.funcmap[name] = fn
@@ -74,6 +74,10 @@ func (e *Engine) Load() error {
 		return nil
 	}
 
+	if err := e.Program.LoadPreBuilt(); err != nil {
+		return err
+	}
+
 	if err := e.Program.Load(); err != nil {
 		return err
 	}
@@ -93,9 +97,14 @@ func (e *Engine) Render(out io.Writer, template string, binding interface{}, lay
 
 	if e.reload {
 		if err := e.Program.LoadName(template); err != nil {
+			if err := e.Program.LoadPreBuiltName(template); err != nil {
+				return err
+			}
 			return err
 		}
 	}
+
+	log.Println(template)
 
 	file := e.Program.File(template)
 	if file == nil {

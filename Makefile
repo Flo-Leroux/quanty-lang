@@ -5,6 +5,9 @@ GOBIN = $(PWD)/bin
 clean:
 	rm -rf ./tmp coverage.out
 
+generate:
+	go generate ./...
+
 lint:
 	$(GOBIN)/golangci-lint run ./...
 
