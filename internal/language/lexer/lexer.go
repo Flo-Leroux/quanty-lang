@@ -110,7 +110,7 @@ func (l *Lexer) lexDoubleQuote() (lit string) {
 // lexIdent -
 func (l *Lexer) lexIdent() string {
 	position := l.position
-	for isLetter(l.ch) {
+	for isLetter(l.ch) || isNumber(l.ch) {
 		l.readChar()
 	}
 	return l.input[position:l.position]
@@ -153,4 +153,9 @@ func isNewline(r byte) bool {
 // isLetter -
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '.' || ch == '#'
+}
+
+// isNumber -
+func isNumber(ch byte) bool {
+	return '0' <= ch && ch <= '9'
 }

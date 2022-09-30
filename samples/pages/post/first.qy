@@ -1,0 +1,5 @@
+component FirstPost {
+  h1 {
+    "First post"
+  }
+}
