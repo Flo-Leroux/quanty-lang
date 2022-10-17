@@ -20,3 +20,9 @@ tmp/
 
 dist/
 bin/
+
+# ANTLR4
+pkg/sdl/grammar/.antlr
+pkg/sdl/parser/**
+!pkg/sdl/parser/*.sh
+!pkg/sdl/parser/generate.go

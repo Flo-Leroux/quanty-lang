@@ -5,6 +5,8 @@ import (
 
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/parser"
+	"github.com/Flo-Leroux/quanty-lang/pkg/antlr4"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -50,7 +52,15 @@ component Main {
 `
 
 	for n := 0; n < b.N; n++ {
-		parser.NewParser(component).Parse()
+		input := antlr.NewInputStream(component)
+		lexer := antlr4.NewquantyLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, 0)
+		p := antlr4.NewquantyParser(stream)
+		p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+		p.BuildParseTrees = true
+		p.Schema()
+
+		// antlr.ParseTreeWalkerDefault.Walk(antlr4.NewQuantyListener(), tree)
 	}
 }
 

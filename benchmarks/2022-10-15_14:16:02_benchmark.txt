@@ -1,0 +1,35 @@
+?   	github.com/Flo-Leroux/quanty-lang	[no test files]
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/engine	0.008s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/engine/format	0.005s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/engine/html	0.013s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/errors	0.008s
+?   	github.com/Flo-Leroux/quanty-lang/internal/language	[no test files]
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/language/ast	0.002s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/language/lexer	0.005s
+goos: linux
+goarch: amd64
+pkg: github.com/Flo-Leroux/quanty-lang/internal/language/parser
+cpu: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+BenchmarkParserComponent-4   	   14799	     74068 ns/op
+BenchmarkParserComponent-4   	   16264	     74230 ns/op
+BenchmarkParserComponent-4   	   16224	     76957 ns/op
+BenchmarkParserComponent-4   	   16226	     81322 ns/op
+BenchmarkParserComponent-4   	   10000	    103086 ns/op
+BenchmarkParserComponent-4   	   14370	     91507 ns/op
+BenchmarkParserComponent-4   	   13490	     79883 ns/op
+BenchmarkParserComponent-4   	   13765	     82677 ns/op
+BenchmarkParserComponent-4   	   13723	     74609 ns/op
+BenchmarkParserComponent-4   	   16190	     74829 ns/op
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/language/parser	19.038s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/language/token	0.010s
+PASS
+ok  	github.com/Flo-Leroux/quanty-lang/internal/server	0.004s
+?   	github.com/Flo-Leroux/quanty-lang/pkg/antlr4	[no test files]

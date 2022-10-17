@@ -1,9 +1,12 @@
 GOBIN = $(PWD)/bin
 
-.PHONY: clean generate run lint security critic test convey build release precommit.rehooks init
+.PHONY: bench clean parser.gen generate run lint security critic test convey build release precommit.rehooks init
 
 clean:
 	rm -rf ./tmp coverage.out
+
+parser.gen:
+	go generate ./pkg/sdl/parser
 
 generate:
 	go generate ./...
@@ -23,6 +26,9 @@ critic:
 test: clean lint security critic
 	go test -coverprofile=coverage.out ./...
 	go tool cover -func=coverage.out
+
+bench:
+	go test -bench=. -run=^$ -benchmem -count=10 ./... |tee ./benchmarks/$$(date +%Y-%m-%d_%H:%M:%S)_benchmark.txt
 
 convey:
 	$(GOPATH)/bin/goconvey -excludedDirs vendor,node_modules,bin,dist,build,.vscode,samples -launchBrowser=false
@@ -75,3 +81,11 @@ init:
 	@echo ""
 	@echo "== install gow =="
 	GOBIN=$(GOBIN) go install github.com/mitranim/gow@latest
+
+	@echo ""
+	@echo "== install ANTLR4 =="
+	curl -o ./bin/antlr-4.11.1-complete.jar https://www.antlr.org/download/antlr-4.11.1-complete.jar
+
+	@echo ""
+	@echo "== install air =="
+	GOBIN=$(GOBIN) go install github.com/cosmtrek/air@latest

@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"os/user"
 
-	"github.com/Flo-Leroux/quanty-lang/internal/server"
+	"github.com/Flo-Leroux/quanty-lang/pkg/sdl"
+	"github.com/Flo-Leroux/quanty-lang/pkg/sdl/listeners/html"
 )
 
 var (
@@ -30,7 +31,17 @@ Built at %s by %s`,
 		usr.Username, version, commit, date, builtBy)
 	fmt.Println()
 
-	app := server.Run()
+	// app := server.Run()
 
-	log.Fatal(app.Listen(":8081"))
+	// log.Fatal(app.Listen(":8081"))
+
+	src := `component Main { div { p { span { strong { "{{ . }}!" }}} span } "hello world!" }`
+
+	l := html.New("locale string")
+
+	sdl.Run(src, l)
+
+	tmpl := l.Lookup("Main")
+
+	tmpl.Execute(os.Stdout, "COUCOU")
 }
