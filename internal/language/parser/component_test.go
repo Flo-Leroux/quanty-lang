@@ -5,7 +5,6 @@ import (
 
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/parser"
-	"github.com/Flo-Leroux/quanty-lang/pkg/antlr4"
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	. "github.com/smartystreets/goconvey/convey"
 )

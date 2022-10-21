@@ -1,12 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"os/user"
-
-	"github.com/Flo-Leroux/quanty-lang/pkg/sdl"
-	"github.com/Flo-Leroux/quanty-lang/pkg/sdl/listeners/html"
+	"github.com/Flo-Leroux/quanty-lang/pkg/lsp"
 )
 
 var (
@@ -17,31 +12,65 @@ var (
 )
 
 func main() {
-	usr, err := user.Current()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf(`
-Hello %s!
-This is the Quanty Query Language!
+	// 	usr, err := user.Current()
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	fmt.Printf(`
+	// Hello %s!
+	// This is the Quanty Query Language!
 
-Version: %s
-Commit: %s
-Built at %s by %s`,
-		usr.Username, version, commit, date, builtBy)
-	fmt.Println()
+	// Version: %s
+	// Commit: %s
+	// Built at %s by %s`,
+	// 		usr.Username, version, commit, date, builtBy)
+	// 	fmt.Println()
 
 	// app := server.Run()
 
 	// log.Fatal(app.Listen(":8081"))
 
-	src := `component Main { div { p { span { strong { "{{ . }}!" }}} span } "hello world!" }`
+	// 	src := `
+	// component Main {
+	// 	div {
+	// 		p {
+	// 			span {
+	// 				strong {
+	// 					"{{ . }}!"
+	// 				}
+	// 			}
+	// 		}
+	// 		span
+	// 	}
+	// 	"hello world!"
+	// }
 
-	l := html.New("locale string")
+	// component Nav {
+	// 	ul {
+	// 		li {
+	// 			"First"
+	// 		}
+	// 		li {
+	// 			"Second"
+	// 		}
+	// 		li {
+	// 			"{{ . }}"
+	// 		}
+	// 	}
+	// }
+	// `
 
-	sdl.Run(src, l)
+	// 	l := html.New("locale string")
 
-	tmpl := l.Lookup("Main")
+	// 	sdl.Run(src, l)
 
-	tmpl.Execute(os.Stdout, "COUCOU")
+	// 	tmpl := l.Lookup("Nav")
+
+	// 	tmpl.Execute(os.Stdout, "COUCOU")
+	// 	fmt.Println()
+
+	err := lsp.Run()
+	if err != nil {
+		panic(err)
+	}
 }
