@@ -5,63 +5,62 @@ import (
 
 	"github.com/Flo-Leroux/quanty-lang/internal/language/ast"
 	"github.com/Flo-Leroux/quanty-lang/internal/language/parser"
-	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-// BenchmarkParserComponent -
-func BenchmarkParserComponent(b *testing.B) {
-	component := `
-component Main {
-	div {
-		span
-		p
-		div {
-			span
-			p
-			div {
-				span
-				p
-			}
-		}
-		div {
-			span
-			p
-			div {
-				span
-				p
-				div {
-					span
-					p
-				}
-				div {
-					span
-					p
-				}
-				div {
-					span
-					p
-				}
-			}
-		}
-	}
-	img
-	"Hello World!"
-}
-`
+// // BenchmarkParserComponent -
+// func BenchmarkParserComponent(b *testing.B) {
+// 	component := `
+// component Main {
+// 	div {
+// 		span
+// 		p
+// 		div {
+// 			span
+// 			p
+// 			div {
+// 				span
+// 				p
+// 			}
+// 		}
+// 		div {
+// 			span
+// 			p
+// 			div {
+// 				span
+// 				p
+// 				div {
+// 					span
+// 					p
+// 				}
+// 				div {
+// 					span
+// 					p
+// 				}
+// 				div {
+// 					span
+// 					p
+// 				}
+// 			}
+// 		}
+// 	}
+// 	img
+// 	"Hello World!"
+// }
+// `
 
-	for n := 0; n < b.N; n++ {
-		input := antlr.NewInputStream(component)
-		lexer := antlr4.NewquantyLexer(input)
-		stream := antlr.NewCommonTokenStream(lexer, 0)
-		p := antlr4.NewquantyParser(stream)
-		p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-		p.BuildParseTrees = true
-		p.Schema()
+// 	// for n := 0; n < b.N; n++ {
+// 	// 	input := antlr.NewInputStream(component)
+// 	// 	lexer := antlr4.NewquantyLexer(input)
+// 	// 	stream := antlr.NewCommonTokenStream(lexer, 0)
+// 	// 	p := antlr4.NewquantyParser(stream)
+// 	// 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+// 	// 	p.BuildParseTrees = true
+// 	// 	p.Schema()
 
-		// antlr.ParseTreeWalkerDefault.Walk(antlr4.NewQuantyListener(), tree)
-	}
-}
+// 	// 	// antlr.ParseTreeWalkerDefault.Walk(antlr4.NewQuantyListener(), tree)
+// 	// }
+// }
 
 // TestParserComponent -
 func TestParserComponent(t *testing.T) {

@@ -39,42 +39,30 @@ func (p *Server) Initialize(ctx context.Context, params *lsp.InitializeParams) (
 	p.Log.Info("client -> server: Initialize")
 	defer p.Log.Info("client -> server: Initialize end")
 
-	init := &lsp.InitializeResult{
-		ServerInfo: &lsp.ServerInfo{
-			Name: "Quanty Lang",
-		},
+	result = &lsp.InitializeResult{
 		Capabilities: lsp.ServerCapabilities{
-			TextDocumentSync: lsp.TextDocumentSyncKindIncremental,
+			TextDocumentSync: lsp.TextDocumentSyncKindFull,
 			CompletionProvider: &lsp.CompletionOptions{
 				ResolveProvider: true,
+				// TriggerCharacters: []string{"<"},
 			},
 		},
 	}
+	return result, err
 
-	return init, nil
-
-	// Add the '<' and '{' trigger so that we can do snippets for tags.
-	// if result.Capabilities.CompletionProvider == nil {
-	// 	result.Capabilities.CompletionProvider = &lsp.CompletionOptions{}
-	// }
-	// result.Capabilities.CompletionProvider.TriggerCharacters = append(result.Capabilities.CompletionProvider.TriggerCharacters, "{", "<")
 	// // Remove all the gopls commands.
 	// if result.Capabilities.ExecuteCommandProvider == nil {
 	// 	result.Capabilities.ExecuteCommandProvider = &lsp.ExecuteCommandOptions{}
 	// }
 	// result.Capabilities.ExecuteCommandProvider.Commands = []string{}
 	// result.Capabilities.DocumentFormattingProvider = true
-	// return result, err
+
+	// return result, nil
 }
 
 func (p *Server) Initialized(ctx context.Context, params *lsp.InitializedParams) (err error) {
 	p.Log.Info("client -> server: Initialized")
 	defer p.Log.Info("client -> server: Initialized end")
-
-	p.Client.LogMessage(ctx, &lsp.LogMessageParams{
-		Type:    lsp.MessageTypeInfo,
-		Message: "Hello My Client!",
-	})
 
 	return
 }
@@ -137,13 +125,18 @@ func (p *Server) ColorPresentation(ctx context.Context, params *lsp.ColorPresent
 func (p *Server) Completion(ctx context.Context, params *lsp.CompletionParams) (result *lsp.CompletionList, err error) {
 	p.Log.Info("client -> server: Completion")
 	defer p.Log.Info("client -> server: Completion end")
-	return
+
+	result.Items = append(result.Items, lsp.CompletionItem{
+		Label: "test",
+	})
+
+	return result, nil
 }
 
 func (p *Server) CompletionResolve(ctx context.Context, params *lsp.CompletionItem) (result *lsp.CompletionItem, err error) {
 	p.Log.Info("client -> server: CompletionResolve")
 	defer p.Log.Info("client -> server: CompletionResolve end")
-	return
+	return params, nil
 }
 
 func (p *Server) Declaration(ctx context.Context, params *lsp.DeclarationParams) (result []lsp.Location /* Declaration | DeclarationLink[] | null */, err error) {
