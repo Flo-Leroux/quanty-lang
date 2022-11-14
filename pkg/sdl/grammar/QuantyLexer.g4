@@ -17,6 +17,7 @@ IDENT
     : [a-zA-Z][a-zA-Z0-9]*
     ;
 
+
 // DOUBLE
 
 // STRING : D_QUOTE (ESC | SAFECODEPOINT)* D_QUOTE;
@@ -69,5 +70,5 @@ LINE_COMMENT
 	;
 
 WS
-   : [ \t\n\r] +  -> channel(WSCHANNEL)
+   : [ \t\n\r] +  -> channel(HIDDEN)
    ;

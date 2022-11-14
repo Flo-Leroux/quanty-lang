@@ -1,24 +1,18 @@
-
 /** Taken from "The Definitive ANTLR 4 Reference" by Terence Parr */
 
 // Derived from http://json.org
 parser grammar QuantyParser;
 
-options { tokenVocab=QuantyLexer; }
+options {
+	tokenVocab = QuantyLexer;
+}
 
-schema
-   : components=component+ EOF
-   ;
+schema: components = component+ EOF;
 
-component
-   : COMPONENT name=IDENT LBRACE selection+ RBRACE
-   ;
+component: COMPONENT name=componentName LBRACE selection+ RBRACE;
+componentName : IDENT;
 
-selection
-    : STRING | field
-    ;
+selection: STRING | field;
 
-field
-    : name=IDENT LBRACE selection+ RBRACE
-    | name=IDENT
-    ;
+field: name = fieldName LBRACE selection+ RBRACE | name = fieldName;
+fieldName : IDENT;

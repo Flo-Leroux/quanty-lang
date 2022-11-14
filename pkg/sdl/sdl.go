@@ -18,3 +18,14 @@ func Run[T parser.QuantyParserListener](source string, listener T) T {
 
 	return listener
 }
+
+func Completion(source string) {
+	input := antlr.NewInputStream(source)
+	lexer := parser.NewQuantyLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := parser.NewQuantyParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	p.BuildParseTrees = true
+	p.Schema()
+
+}
