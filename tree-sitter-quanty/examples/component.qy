@@ -1,0 +1,10 @@
+component title
+	myText1
+
+component subTitle
+	myText1
+		myText2
+
+component fragment
+	myText1
+	myText2

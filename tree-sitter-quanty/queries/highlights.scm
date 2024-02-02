@@ -2,11 +2,10 @@
 	"component"
 ] @keyword
 
-[
- "{"
- "}"
-] @punctuation.bracket
+(component_declaration
+	name: (identifier) @name
+)
 
-(component_definition
-	name: (identifier) @id
+(tag
+	(identifier) @tag
 )

@@ -12,20 +12,36 @@
 module.exports = grammar({
     name: 'quanty',
 
+    externals: ($) => [
+        $._newline,
+        $._indent,
+        $._dedent,
+    ],
+
     rules: {
-        // TODO: add the actual grammar rules
         program: $ => repeat($._fragment),
 
         _fragment: $ => choice(
-            $.component_definition
+            $.component_declaration,
         ),
 
-        component_definition: $ => seq(
+        component_declaration: $ => seq(
             'component',
             field('name', $.identifier),
-            '{',
+            $._indent,
+            field('body', repeat1($.tag)),
+            $._dedent,
+        ),
 
-            '}'
+        tag: $ => seq(
+            field('name', $.identifier),
+            field('children', optional($.children))
+        ),
+
+        children: ($) => seq(
+            $._indent,
+            repeat1($.tag),
+            $._dedent
         ),
 
         identifier: ($) => /[_A-Za-z][_0-9A-Za-z]*/,

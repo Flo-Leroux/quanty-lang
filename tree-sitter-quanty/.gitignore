@@ -4,3 +4,6 @@ build
 package-lock.json
 /target/
 .build/
+a.out.js
+a.out.wasm
+tree-sitter-quanty.wasm
