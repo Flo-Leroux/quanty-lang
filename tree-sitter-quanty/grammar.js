@@ -29,13 +29,16 @@ module.exports = grammar({
             'component',
             field('name', $.identifier),
             $._indent,
-            field('body', repeat1($.tag)),
+            field('body',
+                repeat1($.tag),
+            ),
             $._dedent,
         ),
 
         tag: $ => seq(
             field('name', $.identifier),
-            field('children', optional($.children))
+            field('children', optional($.children)),
+            $._newline,
         ),
 
         children: ($) => seq(

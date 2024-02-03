@@ -19,15 +19,17 @@
   "devDependencies": {
     "eslint": ">=8.56.0",
     "eslint-config-google": "^0.14.0",
-    "tree-sitter-cli": "^0.20.8",
-    "node-gyp": "^10.0.1"
+    "node-gyp": "^10.0.1",
+    "nodemon": "^3.0.3",
+    "tree-sitter-cli": "^0.20.8"
   },
   "scripts": {
-    "build": "pnpm generate && && node-gyp build",
+    "build": "pnpm generate && node-gyp build",
     "lint": "eslint grammar.js",
     "test": "tree-sitter test",
     "generate": "tree-sitter generate",
-    "parse": "pnpm generate && tree-sitter parse",
+    "parse": "tree-sitter parse",
+    "dev": "nodemon -w ./examples -w ./grammar.js -e qy,js,quanty --exec tree-sitter",
     "wasm": "tree-sitter build-wasm",
     "playground": "pnpm generate && pnpm wasm && tree-sitter playground"
   },
